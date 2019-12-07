@@ -1,0 +1,34 @@
+# compile stage
+FROM golang:1.13.0 AS build
+
+ARG workbuild=/usr/dist
+
+COPY    go.mod /src/
+COPY    go.sum /src/
+WORKDIR /src/
+RUN     go mod download
+RUN     go get github.com/google/wire/cmd/wire@v0.3.0
+
+COPY . /src
+
+RUN     wire ./cmd/exchangeAPI/
+RUN     make build-static path=${workbuild}
+
+# package stage
+FROM alpine:3.9
+
+LABEL maintainer="Challenge Bravo"
+
+ARG workbuild=/usr/dist
+
+RUN apk add --no-cache \
+    bash \
+    tzdata
+
+COPY --from=build ${workbuild}/exchange-api.bin /bin/exchange-api.bin
+RUN mkdir -p /etc/exchange-api/
+RUN echo "{}" >> /etc/exchange-api/config.json
+
+EXPOSE  3000
+WORKDIR /bin
+CMD     [ "/bin/exchange-api.bin" , "-config-location=/etc/exchange-api/config.json" ]
