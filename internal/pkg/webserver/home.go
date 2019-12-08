@@ -7,16 +7,16 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-//Home renderiza página da API
+// Home renderiza página da API
 type Home struct {
 }
 
-//NewHome Cria instância de Home
+// NewHome Cria instância de Home
 func NewHome() (i *Home) {
 	return &Home{}
 }
 
-//Serve responde conteúdo da página inicial
+// Serve responde conteúdo da página inicial
 func (e Home) Serve(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 
 	html := `

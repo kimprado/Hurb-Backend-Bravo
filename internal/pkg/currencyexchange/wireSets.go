@@ -2,7 +2,7 @@ package currencyexchange
 
 import "github.com/google/wire"
 
-//PkgSet define providers do pacote
+// PkgSet define providers do pacote
 var PkgSet = wire.NewSet(
 	NewCalculatorController,
 	// Define que a implementação Padão de Calculator é CalculatorController

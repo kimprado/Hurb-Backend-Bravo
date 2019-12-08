@@ -22,14 +22,14 @@ type Logger interface {
 	Tracef(msg string, v ...interface{})
 }
 
-//Redis representa pool de conexões Redis
+// Redis representa pool de conexões Redis
 type Redis struct {
 	config config.Redis
 	pool   *redis.Pool
 	logger Logger
 }
 
-//NewRedis cria instância de Redis
+// NewRedis cria instância de Redis
 func newRedis(config config.Redis, l Logger) (r *Redis, err error) {
 	var rd = new(Redis)
 	rd.config = config
@@ -60,7 +60,7 @@ func newRedis(config config.Redis, l Logger) (r *Redis, err error) {
 	return
 }
 
-//Get retorna conexão com Redis do Pool
+// Get retorna conexão com Redis do Pool
 func (r *Redis) Get() (c redis.Conn) {
 	c = r.pool.Get()
 	return

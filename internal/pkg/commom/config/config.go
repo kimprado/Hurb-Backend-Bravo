@@ -28,7 +28,7 @@ type Configuration struct {
 	}
 }
 
-//Redis representa configuração de conexão Redis
+// Redis representa configuração de conexão Redis
 type Redis struct {
 	Host     string `default:"localhost"`
 	Port     int    `default:"6379"`
@@ -36,25 +36,25 @@ type Redis struct {
 	Password string `required:"false"`
 }
 
-//RedisDB representa configuração Redis em modo DB
+// RedisDB representa configuração Redis em modo DB
 type RedisDB Redis
 
-//NewRedisDB cria novo RedisDB
+// NewRedisDB cria novo RedisDB
 func NewRedisDB(c Configuration) (r RedisDB) {
 	r = c.RedisDB
 	return
 }
 
-//LoggingLevels representa loggers e seus respectivos níveis
+// LoggingLevels representa loggers e seus respectivos níveis
 type LoggingLevels map[string]string
 
-//NewLoggingLevels cria novo LoggingLevels
+// NewLoggingLevels cria novo LoggingLevels
 func NewLoggingLevels(c Configuration) (ll LoggingLevels) {
 	ll = c.Logging.Level
 	return
 }
 
-//NewConfig -
+// NewConfig -
 func NewConfig(configLocationFile string) (c Configuration, err error) {
 	if !loaded {
 		var configLocation string

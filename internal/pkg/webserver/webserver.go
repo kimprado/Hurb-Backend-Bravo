@@ -21,20 +21,20 @@ var portNumber = regexp.MustCompile("^\\d{1,5}$")
 
 var router *httprouter.Router
 
-//WebServer representa servidor web que atende requisições http
+// WebServer representa servidor web que atende requisições http
 type WebServer struct {
 	*ParamWebServer
 	home *Home
 }
 
-//ParamWebServer é objeto de parâmetro e encapsula parâmetros
+// ParamWebServer é objeto de parâmetro e encapsula parâmetros
 type ParamWebServer struct {
 	ctrl   *api.Controller
 	config cfg.Configuration
 	logger logging.LoggerWebServer
 }
 
-//NewParamWebServer cria referência WebServer
+// NewParamWebServer cria referência WebServer
 func NewParamWebServer(c *api.Controller, config cfg.Configuration, l logging.LoggerWebServer) (p *ParamWebServer) {
 	p = new(ParamWebServer)
 	p.ctrl = c
@@ -43,7 +43,7 @@ func NewParamWebServer(c *api.Controller, config cfg.Configuration, l logging.Lo
 	return
 }
 
-//NewWebServer cria referência WebServer
+// NewWebServer cria referência WebServer
 func NewWebServer(p *ParamWebServer) (w *WebServer) {
 	w = new(WebServer)
 	w.ParamWebServer = p
@@ -59,7 +59,7 @@ func serveHTTP(res http.ResponseWriter, req *http.Request) {
 	router.ServeHTTP(res, req)
 }
 
-//Start é responsável por inicializar o servidor http
+// Start é responsável por inicializar o servidor http
 func (ws *WebServer) Start() {
 
 	router = httprouter.New()

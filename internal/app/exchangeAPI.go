@@ -5,13 +5,13 @@ import (
 	"github.com/rep/exchange/internal/pkg/webserver"
 )
 
-//ExchangeApp representa instância da aplicação
+// ExchangeApp representa instância da aplicação
 type ExchangeApp struct {
 	webServer *webserver.WebServer
 	logger    logging.Logger
 }
 
-//NewExchangeApp cria app
+// NewExchangeApp cria app
 func NewExchangeApp(ws *webserver.WebServer, l logging.Logger) (a *ExchangeApp) {
 	a = new(ExchangeApp)
 	a.webServer = ws
@@ -19,7 +19,7 @@ func NewExchangeApp(ws *webserver.WebServer, l logging.Logger) (a *ExchangeApp) 
 	return
 }
 
-//Bootstrap é responsável por iniciar a aplicação
+// Bootstrap é responsável por iniciar a aplicação
 func (a *ExchangeApp) Bootstrap() {
 	a.logger.Infof("Iniciando serviços da aplicação...\n")
 

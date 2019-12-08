@@ -10,7 +10,7 @@ import (
 	"github.com/rep/exchange/internal/pkg/webserver"
 )
 
-//AppSet define providers do pacote
+// AppSet define providers do pacote
 var AppSet = wire.NewSet(
 	config.PkgSet,
 	logging.PkgSet,
