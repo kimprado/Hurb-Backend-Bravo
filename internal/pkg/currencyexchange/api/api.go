@@ -16,8 +16,9 @@ type Controller struct {
 }
 
 // NewController é responsável por instanciar Controller
-func NewController(l logging.LoggerAPIExchange) (r *Controller) {
+func NewController(c currencyexchange.Calculator, l logging.LoggerAPIExchange) (r *Controller) {
 	r = new(Controller)
+	r.calculator = c
 	r.logger = l
 	return
 }

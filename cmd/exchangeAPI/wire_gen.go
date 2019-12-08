@@ -9,6 +9,7 @@ import (
 	"github.com/rep/exchange/internal/app"
 	"github.com/rep/exchange/internal/pkg/commom/config"
 	"github.com/rep/exchange/internal/pkg/commom/logging"
+	"github.com/rep/exchange/internal/pkg/currencyexchange"
 	"github.com/rep/exchange/internal/pkg/currencyexchange/api"
 	"github.com/rep/exchange/internal/pkg/webserver"
 )
@@ -38,8 +39,10 @@ func initializeApp(path string) (*app.ExchangeApp, error) {
 		return nil, err
 	}
 	loggingLevels := config.NewLoggingLevels(configuration)
+	loggerCalculator := logging.NewCalculator(loggingLevels)
+	calculatorController := currencyexchange.NewCalculatorController(loggerCalculator)
 	loggerAPIExchange := logging.NewLoggerAPIExchange(loggingLevels)
-	controller := api.NewController(loggerAPIExchange)
+	controller := api.NewController(calculatorController, loggerAPIExchange)
 	loggerWebServer := logging.NewWebServer(loggingLevels)
 	paramWebServer := webserver.NewParamWebServer(controller, configuration, loggerWebServer)
 	webServer := webserver.NewWebServer(paramWebServer)

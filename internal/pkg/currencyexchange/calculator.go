@@ -1,5 +1,7 @@
 package currencyexchange
 
+import "github.com/rep/exchange/internal/pkg/commom/logging"
+
 // Calculator é um ponto de entrada para comportamento
 // da aplicação. O controlador do domínio.
 type Calculator interface {
@@ -21,4 +23,19 @@ type CurrencyRemover interface {
 // CalculatorController é o ponto de entrada para comportamentos
 // da aplicação. Implementação do controlador do domínio.
 type CalculatorController struct {
+	logger logging.LoggerCalculator
+}
+
+// NewCalculatorController é responsável por instanciar Controller
+func NewCalculatorController(l logging.LoggerCalculator) (c *CalculatorController) {
+	c = new(CalculatorController)
+	c.logger = l
+	return
+}
+
+// Exchange executa conversão monetária
+func (c *CalculatorController) Exchange() {
+
+	c.logger.Debugf("Calculando câmbio")
+
 }
