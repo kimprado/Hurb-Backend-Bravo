@@ -3,7 +3,7 @@ package currencyexchange
 // Calculator é um ponto de entrada para comportamento
 // da aplicação. O controlador do domínio.
 type Calculator interface {
-	Calculate()
+	Exchange()
 }
 
 // CurrencyAdder é um ponto de entrada para comportamento
