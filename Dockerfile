@@ -9,4 +9,4 @@ WORKDIR /src/
 RUN     go mod download
 RUN     go get github.com/google/wire/cmd/wire@v0.3.0
 
-COPY . /src
+EXPOSE  3000
