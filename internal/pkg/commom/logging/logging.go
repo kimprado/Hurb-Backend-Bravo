@@ -10,6 +10,11 @@ type Logger struct {
 	l.Logger
 }
 
+//LoggerAPIExchange para logar currencyexchange.api.exchange
+type LoggerAPIExchange struct {
+	l.Logger
+}
+
 //LoggerRedisDB para logar infra.redis.db
 type LoggerRedisDB struct {
 	l.Logger
@@ -23,6 +28,12 @@ type LoggerWebServer struct {
 //NewLogger cria Logger ""(ROOT)
 func NewLogger(configLevels config.LoggingLevels) (log Logger) {
 	log = Logger{l.NewLogger("", configLevels)}
+	return
+}
+
+//NewLoggerAPIExchange cria Logger "currencyexchange.api.exchange"
+func NewLoggerAPIExchange(configLevels config.LoggingLevels) (log LoggerAPIExchange) {
+	log = LoggerAPIExchange{l.NewLogger("currencyexchange.api.exchange", configLevels)}
 	return
 }
 

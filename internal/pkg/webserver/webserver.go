@@ -12,6 +12,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	cfg "github.com/rep/exchange/internal/pkg/commom/config"
 	"github.com/rep/exchange/internal/pkg/commom/logging"
+	"github.com/rep/exchange/internal/pkg/currencyexchange/api"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -28,13 +29,15 @@ type WebServer struct {
 
 //ParamWebServer é objeto de parâmetro e encapsula parâmetros
 type ParamWebServer struct {
+	ctrl   *api.Controller
 	config cfg.Configuration
 	logger logging.LoggerWebServer
 }
 
 //NewParamWebServer cria referência WebServer
-func NewParamWebServer(config cfg.Configuration, l logging.LoggerWebServer) (p *ParamWebServer) {
+func NewParamWebServer(c *api.Controller, config cfg.Configuration, l logging.LoggerWebServer) (p *ParamWebServer) {
 	p = new(ParamWebServer)
+	p.ctrl = c
 	p.config = config
 	p.logger = l
 	return
@@ -62,6 +65,7 @@ func (ws *WebServer) Start() {
 	router = httprouter.New()
 
 	router.GET("/", ws.home.Serve)
+	router.GET("/exchange", ws.ctrl.Exchange)
 
 	var defaultHandler http.Handler
 
