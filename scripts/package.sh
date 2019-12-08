@@ -4,7 +4,7 @@ set -e
 
 case "$1" in
     package)
-        docker image build -t challenge/exchange-api .
+        docker image build -t challenge/exchange-api -f Dockerfile.package . 
         ;;
     *)
         echo "Usage: {package}" >&2
