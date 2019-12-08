@@ -3,7 +3,9 @@ volumes:
   redisdb:
 services:
   api:
-    build: .
+    build:
+      context: '${PWD}'
+      dockerfile: '${PWD}/Dockerfile.package'
     env_file: '${PWD}/configs/config.env'
     ports: 
       - 3000:3000
