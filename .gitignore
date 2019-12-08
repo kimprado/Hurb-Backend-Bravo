@@ -4,4 +4,5 @@
 *.out
 .tmp-configure
 .vscode
+__debug_bin
 configs/*
