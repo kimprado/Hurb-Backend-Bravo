@@ -43,3 +43,10 @@ services:
       - ./configs/config-integration-container.json:/src/configs/config-integration.json
     depends_on:
       - redis-test
+  test-all:
+    build: .
+    command: make test-all
+    volumes:
+      - ./configs/config-integration-container.json:/src/configs/config-integration.json
+    depends_on:
+      - redis-test
