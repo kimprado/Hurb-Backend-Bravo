@@ -25,6 +25,18 @@ test-all:
 test-envvars:
 	@./scripts/test.sh envvars
 
+test-unit-container:
+	@docker-compose up --build test-unit
+
+test-integration-container:
+	@docker-compose up --build test-integration
+
+test-all-container:
+	@docker-compose up --build test-all
+
+test-envvars-container:
+	@docker-compose up --build test-envvars
+
 run: 
 	@./scripts/deploy.sh start
 	@echo "Acesse API:"
