@@ -50,3 +50,6 @@ services:
       - ./configs/config-integration-container.json:/src/configs/config-integration.json
     depends_on:
       - redis-test
+  test-envvars:
+    build: .
+    command: make test-envvars
