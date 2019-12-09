@@ -22,10 +22,12 @@ build:
 build-static:
 	@./scripts/compile.sh build-static $(path)
 
+## wire						: Gera/Atualiza códigos(wire_gen.go) do framework de Injeção de Dependências.
 wire:
 	@./scripts/compile.sh wire
 	@./scripts/compile.sh wire-testes
 
+## generate					: Atualiza códigos(wire_gen.go) do framework de Injeção de Dependências.
 generate:
 	@./scripts/compile.sh generate
 	@./scripts/compile.sh generate-testes
