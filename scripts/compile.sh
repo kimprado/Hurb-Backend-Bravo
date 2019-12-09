@@ -31,6 +31,7 @@ case "$1" in
     wire-testes)
         wire \
         ./internal/pkg/commom/config \
+        ./internal/pkg/currencyexchange \
         ./internal/pkg/infra/redis \
         ;;
     generate)
@@ -39,6 +40,7 @@ case "$1" in
     generate-testes)
         go generate \
         ./internal/pkg/commom/config \
+        ./internal/pkg/currencyexchange \
         ./internal/pkg/infra/redis \
         ;;
     *)

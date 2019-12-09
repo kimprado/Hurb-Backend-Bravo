@@ -1,6 +1,11 @@
 package currencyexchange
 
-import "github.com/google/wire"
+import (
+	"github.com/google/wire"
+	"github.com/rep/exchange/internal/pkg/commom/config"
+	"github.com/rep/exchange/internal/pkg/commom/logging"
+	"github.com/rep/exchange/internal/pkg/infra/redis"
+)
 
 // PkgSet define providers do pacote
 var PkgSet = wire.NewSet(
@@ -12,3 +17,20 @@ var PkgSet = wire.NewSet(
 	wire.Bind(new(CurrencyManager), new(*CurrencyManagerProxy)),
 	NewCurrencyManagerDB,
 )
+
+var pkgSetConfigTest = wire.NewSet(
+	newIntegrationConfigFile,
+	config.PkgSet,
+)
+
+var pkgSetTest = wire.NewSet(
+	PkgSet,
+	config.NewLoggingLevels,
+	config.NewRedisDB,
+	logging.PkgSet,
+	redis.PkgSet,
+)
+
+func newIntegrationConfigFile() string {
+	return "../../../configs/config-integration.json"
+}
