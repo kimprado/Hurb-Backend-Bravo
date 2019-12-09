@@ -5,7 +5,8 @@ import "github.com/rep/exchange/internal/pkg/commom/logging"
 // Calculator é um ponto de entrada para comportamento
 // da aplicação. O controlador do domínio.
 type Calculator interface {
-	Exchange()
+	// Calcula câmbio monetário
+	Exchange(from, to string, amount float64)
 }
 
 // CurrencyAdder é um ponto de entrada para comportamento
@@ -36,11 +37,11 @@ func NewCalculatorController(cm CurrencyManager, l logging.LoggerCalculator) (c 
 }
 
 // Exchange executa conversão monetária
-func (c *CalculatorController) Exchange() {
+func (c *CalculatorController) Exchange(from, to string, amount float64) {
 	// Validar moedas disponíveis para conversão
 	// Consultar taxas de câmbio
 	// Calcular conversão
 
-	cur1, _ := c.cm.Find("")
+	cur1, _ := c.cm.Find(from)
 	c.logger.Debugf("Calculando câmbio com moeda: %v\n", cur1)
 }

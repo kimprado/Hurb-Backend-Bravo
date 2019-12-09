@@ -2,7 +2,9 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/rep/exchange/internal/pkg/commom/logging"
@@ -26,7 +28,22 @@ func NewController(c currencyexchange.Calculator, l logging.LoggerAPIExchange) (
 // Exchange calcula câmbio
 func (v *Controller) Exchange(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
 
-	v.calculator.Exchange()
+	queryValues := req.URL.Query()
+
+	from := queryValues.Get("from")
+	to := queryValues.Get("to")
+	strAmount := queryValues.Get("amount")
+
+	amount, err := strconv.ParseFloat(strAmount, 64)
+
+	if err != nil {
+		v.logger.Errorf("Consulta Exchange %+v\n", params)
+		res.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(res).Encode(fmt.Sprintf("Amount %q is invalid", strAmount))
+		return
+	}
+
+	v.calculator.Exchange(from, to, amount)
 
 	res.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	res.WriteHeader(http.StatusOK)
