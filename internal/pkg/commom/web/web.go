@@ -11,8 +11,14 @@ type HTTPStatusCode int
 // ErrorMessage represneta mensagem de erro
 type ErrorMessage string
 
+// NewErrorMessage cria instância de ErrorMessage
+func NewErrorMessage(message string) (e *ErrorMessage) {
+	e = (*ErrorMessage)(&message)
+	return
+}
+
 func (em ErrorMessage) String() string {
-	return string(em)
+	return (string)(em)
 }
 
 // HTTPResponse representa resposta ao cliente HTTP
