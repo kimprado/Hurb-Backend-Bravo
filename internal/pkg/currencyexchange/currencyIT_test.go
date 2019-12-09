@@ -13,7 +13,7 @@ func TestFindSupportedCurrency(t *testing.T) {
 
 	var err error
 
-	setUpFindSupportedCurrency(t)
+	err = setUpFindSupportedCurrency(t)
 	if err != nil {
 		t.Errorf("Erro ao preparar teste: %+v\n", err)
 		return
