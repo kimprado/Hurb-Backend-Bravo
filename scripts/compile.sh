@@ -4,18 +4,16 @@ set -e
 
 case "$1" in
     build)
-        cd ./cmd/exchangeAPI/
         go build -ldflags \
         '-X github.com/prometheus/common/version.Version='$GIT_VERSION'
         -X github.com/prometheus/common/version.BuildDate='$DATE' 
         -X github.com/prometheus/common/version.Branch='$BRANCH' 
         -X github.com/prometheus/common/version.Revision='$GIT_REVISION'
         -X github.com/prometheus/common/version.BuildUser='$USER'' \
-        -o ../../exchange-api.bin ./ 
+        -o ./exchange-api.bin github.com/rep/exchange/cmd/exchangeAPI 
         ;;
     build-static)
         WORKBUILD=${2:-/usr/dist}
-        cd ./cmd/exchangeAPI/
         CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo \
         -ldflags \
         '-X github.com/prometheus/common/version.Version='$GIT_VERSION'
@@ -23,7 +21,7 @@ case "$1" in
         -X github.com/prometheus/common/version.Branch='$BRANCH' 
         -X github.com/prometheus/common/version.Revision='$GIT_REVISION'
         -X github.com/prometheus/common/version.BuildUser='$USER'' \
-        -o $WORKBUILD/exchange-api.bin ./
+        -o $WORKBUILD/exchange-api.bin github.com/rep/exchange/cmd/exchangeAPI 
         ;;
     wire)
         wire ./cmd/exchangeAPI/

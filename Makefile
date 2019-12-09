@@ -19,7 +19,7 @@ stop:
 build:
 	@./scripts/compile.sh build
 
-## build-static					: Compila aplicação com lincagem estática. Ex: 'make build-static path=../../'.
+## build-static					: Compila aplicação com lincagem estática. Ex: 'make build-static path=./'.
 build-static:
 	@./scripts/compile.sh build-static $(path)
 
