@@ -11,31 +11,36 @@ type Calculator interface {
 // CurrencyAdder é um ponto de entrada para comportamento
 // da aplicação. O controlador do domínio.
 type CurrencyAdder interface {
-	Add()
+	Add(currency string)
 }
 
 // CurrencyRemover é um ponto de entrada para comportamento
 // da aplicação. O controlador do domínio.
 type CurrencyRemover interface {
-	Remove()
+	Remove(currency string)
 }
 
 // CalculatorController é o ponto de entrada para comportamentos
 // da aplicação. Implementação do controlador do domínio.
 type CalculatorController struct {
+	cm     CurrencyManager
 	logger logging.LoggerCalculator
 }
 
 // NewCalculatorController é responsável por instanciar Controller
-func NewCalculatorController(l logging.LoggerCalculator) (c *CalculatorController) {
+func NewCalculatorController(cm CurrencyManager, l logging.LoggerCalculator) (c *CalculatorController) {
 	c = new(CalculatorController)
+	c.cm = cm
 	c.logger = l
 	return
 }
 
 // Exchange executa conversão monetária
 func (c *CalculatorController) Exchange() {
+	// Validar moedas disponíveis para conversão
+	// Consultar taxas de câmbio
+	// Calcular conversão
 
-	c.logger.Debugf("Calculando câmbio")
-
+	cur1 := c.cm.Find("")
+	c.logger.Debugf("Calculando câmbio com moeda: %v\n", cur1)
 }
