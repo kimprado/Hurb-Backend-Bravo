@@ -62,8 +62,9 @@ func (cm *CurrencyManagerProxy) Add(currency string) (err error) {
 }
 
 // Remove delega para outras implementações. Remove moeda
-func (cm *CurrencyManagerProxy) Remove(currency string) {
+func (cm *CurrencyManagerProxy) Remove(currency string) (err error) {
 
+	return
 }
 
 // CurrencyManagerDB implementa CurrencyManager com acesso a DB
@@ -119,6 +120,16 @@ func (cm *CurrencyManagerDB) Add(currency string) (err error) {
 }
 
 // Remove delega para outras implementações. Remove moeda
-func (cm *CurrencyManagerDB) Remove(currency string) {
+func (cm *CurrencyManagerDB) Remove(currency string) (err error) {
 
+	con := cm.redisClient.Get()
+	defer con.Close()
+
+	_, err = con.Do("SREM", fmt.Sprintf("%s:currency:supported", cm.redisCfg.Prefix), currency)
+
+	if err != nil {
+		return
+	}
+
+	return
 }

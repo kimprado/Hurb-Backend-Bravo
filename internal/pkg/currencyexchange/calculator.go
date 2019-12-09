@@ -18,7 +18,7 @@ type CurrencyAdder interface {
 // CurrencyRemover é um ponto de entrada para comportamento
 // da aplicação. O controlador do domínio.
 type CurrencyRemover interface {
-	Remove(currency string)
+	Remove(currency string) (err error)
 }
 
 // CalculatorController é o ponto de entrada para comportamentos
