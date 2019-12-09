@@ -37,6 +37,12 @@ test-all-container:
 test-envvars-container:
 	@docker-compose up --build test-envvars
 
+infra-start:
+	@docker-compose up -d --build redisdb
+
+infra-stop:
+	@docker-compose rm -fsv redisdb
+
 run: 
 	@./scripts/deploy.sh start
 	@echo "Acesse API:"
