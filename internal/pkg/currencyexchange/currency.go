@@ -29,6 +29,12 @@ func newCurrency(code string) (c *Currency) {
 	return
 }
 
+// Code retorna valor de code
+func (c Currency) Code() (cd string) {
+	cd = c.code
+	return
+}
+
 // CurrencyManagerProxy implementa proxy para CurrencyManagers
 type CurrencyManagerProxy struct {
 	db     *CurrencyManagerDB

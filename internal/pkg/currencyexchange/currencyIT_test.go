@@ -39,8 +39,16 @@ func TestFindSupportedCurrency(t *testing.T) {
 		t.Errorf("Consulta Redis %v\n", err)
 		return
 	}
-
 	assert.NotNil(t, result)
+	assert.Equal(t, result.Code(), "BRL")
+
+	result, err = currencyManager.Find("BEF")
+	if err != nil {
+		t.Errorf("Consulta Redis %v\n", err)
+		return
+	}
+
+	assert.Nil(t, result)
 
 }
 
