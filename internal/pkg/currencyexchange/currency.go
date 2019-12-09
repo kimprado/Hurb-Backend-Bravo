@@ -37,7 +37,7 @@ func (c Currency) Code() (cd string) {
 
 // CurrencyManagerProxy implementa proxy para CurrencyManagers
 type CurrencyManagerProxy struct {
-	db     *CurrencyManagerDB
+	db     CurrencyManager
 	logger logging.LoggerCurrency
 }
 
@@ -56,8 +56,9 @@ func (cm *CurrencyManagerProxy) Find(currency string) (c *Currency, err error) {
 }
 
 // Add delega para outras implementações. Adiciona moeda
-func (cm *CurrencyManagerProxy) Add(currency string) {
+func (cm *CurrencyManagerProxy) Add(currency string) (err error) {
 
+	return
 }
 
 // Remove delega para outras implementações. Remove moeda
@@ -103,8 +104,18 @@ func (cm *CurrencyManagerDB) Find(currency string) (c *Currency, err error) {
 }
 
 // Add delega para outras implementações. Adiciona moeda
-func (cm *CurrencyManagerDB) Add(currency string) {
+func (cm *CurrencyManagerDB) Add(currency string) (err error) {
 
+	con := cm.redisClient.Get()
+	defer con.Close()
+
+	_, err = con.Do("SADD", fmt.Sprintf("%s:currency:supported", cm.redisCfg.Prefix), currency)
+
+	if err != nil {
+		return
+	}
+
+	return
 }
 
 // Remove delega para outras implementações. Remove moeda
