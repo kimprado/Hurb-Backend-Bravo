@@ -4,6 +4,15 @@
 help : Makefile
 	@sed -n 's/^##//p' $<
 
+## run						: Executa aplicação
+run: 
+	@./scripts/deploy.sh start
+	@echo "Acesse API:"
+	@echo "http://`docker-compose port api 3000`/"
+
+## stop						: Pára aplicação
+stop:
+	@./scripts/deploy.sh stop
 
 ## build						: Compila aplicação. Gera arquivo './exchange-api.bin'
 build:
@@ -54,16 +63,6 @@ infra-start:
 ## infra-stop					: Interrompe serviços de dependência containerizados
 infra-stop:
 	@docker-compose rm -fsv redisdb
-
-## run						: Executa aplicação
-run: 
-	@./scripts/deploy.sh start
-	@echo "Acesse API:"
-	@echo "http://`docker-compose port api 3000`/"
-
-## stop						: Pára aplicação
-stop:
-	@./scripts/deploy.sh stop
 
 package: 
 	@./scripts/package.sh package
