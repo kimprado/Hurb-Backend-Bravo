@@ -1,5 +1,6 @@
 # Criar dockerfile auto-documentado. 
 # Self-Documenting Makefiles https://swcarpentry.github.io/make-novice/08-self-doc/index.html
+## help						: Exibe comandos make disponíveis.
 .PHONY : help
 help : Makefile
 	@sed -n 's/^##//p' $<
