@@ -11,6 +11,7 @@ import (
 	"github.com/rep/exchange/internal/pkg/commom/logging"
 	"github.com/rep/exchange/internal/pkg/currencyexchange"
 	"github.com/rep/exchange/internal/pkg/currencyexchange/api"
+	"github.com/rep/exchange/internal/pkg/infra/redis"
 	"github.com/rep/exchange/internal/pkg/webserver"
 )
 
@@ -38,9 +39,16 @@ func initializeApp(path string) (*app.ExchangeApp, error) {
 	if err != nil {
 		return nil, err
 	}
+	redisDB := config.NewRedisDB(configuration)
 	loggingLevels := config.NewLoggingLevels(configuration)
+	loggerRedisDB := logging.NewRedisDB(loggingLevels)
+	dbConnection, err := redis.NewDBConnection(redisDB, loggerRedisDB)
+	if err != nil {
+		return nil, err
+	}
 	loggerCurrency := logging.NewCurrency(loggingLevels)
-	currencyManagerProxy := currencyexchange.NewCurrencyManagerProxy(loggerCurrency)
+	currencyManagerDB := currencyexchange.NewCurrencyManagerDB(dbConnection, loggerCurrency)
+	currencyManagerProxy := currencyexchange.NewCurrencyManagerProxy(currencyManagerDB, loggerCurrency)
 	loggerCalculator := logging.NewCalculator(loggingLevels)
 	calculatorController := currencyexchange.NewCalculatorController(currencyManagerProxy, loggerCalculator)
 	loggerAPIExchange := logging.NewLoggerAPIExchange(loggingLevels)

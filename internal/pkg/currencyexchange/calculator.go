@@ -41,6 +41,6 @@ func (c *CalculatorController) Exchange() {
 	// Consultar taxas de câmbio
 	// Calcular conversão
 
-	cur1 := c.cm.Find("")
+	cur1, _ := c.cm.Find("")
 	c.logger.Debugf("Calculando câmbio com moeda: %v\n", cur1)
 }

@@ -1,6 +1,9 @@
 package currencyexchange
 
-import "github.com/rep/exchange/internal/pkg/commom/logging"
+import (
+	"github.com/rep/exchange/internal/pkg/commom/logging"
+	"github.com/rep/exchange/internal/pkg/infra/redis"
+)
 
 // CurrencyManager gerencia moedas disponíveis para cálculo.
 type CurrencyManager interface {
@@ -8,7 +11,7 @@ type CurrencyManager interface {
 	CurrencyRemover
 
 	// Consulta moedas ativas
-	Find(currency string) (c *Currency)
+	Find(currency string) (c *Currency, err error)
 }
 
 // Currency representa entidade monetária com valor associado
@@ -17,21 +20,29 @@ type Currency struct {
 	rate float64
 }
 
+func newCurrency(code string) (c *Currency) {
+	c = new(Currency)
+	c.code = code
+	return
+}
+
 // CurrencyManagerProxy implementa proxy para CurrencyManagers
 type CurrencyManagerProxy struct {
+	db     *CurrencyManagerDB
 	logger logging.LoggerCurrency
 }
 
 // NewCurrencyManagerProxy é responsável por instanciar Controller
-func NewCurrencyManagerProxy(l logging.LoggerCurrency) (c *CurrencyManagerProxy) {
+func NewCurrencyManagerProxy(db *CurrencyManagerDB, l logging.LoggerCurrency) (c *CurrencyManagerProxy) {
 	c = new(CurrencyManagerProxy)
+	c.db = db
 	c.logger = l
 	return
 }
 
 // Find delega para outras implementações. Consulta moedas ativas
-func (cm *CurrencyManagerProxy) Find(currency string) (c *Currency) {
-
+func (cm *CurrencyManagerProxy) Find(currency string) (c *Currency, err error) {
+	c, err = cm.db.Find(currency)
 	return
 }
 
@@ -42,5 +53,50 @@ func (cm *CurrencyManagerProxy) Add(currency string) {
 
 // Remove delega para outras implementações. Remove moeda
 func (cm *CurrencyManagerProxy) Remove(currency string) {
+
+}
+
+// CurrencyManagerDB implementa CurrencyManager com acesso a DB
+type CurrencyManagerDB struct {
+	redisClient redis.DBConnection
+	logger      logging.LoggerCurrency
+}
+
+// NewCurrencyManagerDB é responsável por instanciar Controller
+func NewCurrencyManagerDB(r redis.DBConnection, l logging.LoggerCurrency) (c *CurrencyManagerDB) {
+	c = new(CurrencyManagerDB)
+	c.redisClient = r
+	c.logger = l
+	return
+}
+
+// Find delega para outras implementações. Consulta moedas ativas
+func (cm *CurrencyManagerDB) Find(currency string) (c *Currency, err error) {
+	const found = 1
+
+	con := cm.redisClient.Get()
+	defer con.Close()
+
+	var reply interface{}
+	reply, err = con.Do("SISMEMBER", "currency:supported", currency)
+
+	if err != nil {
+		return
+	}
+
+	if reply.(int64) == found {
+		c = newCurrency(currency)
+	}
+
+	return
+}
+
+// Add delega para outras implementações. Adiciona moeda
+func (cm *CurrencyManagerDB) Add(currency string) {
+
+}
+
+// Remove delega para outras implementações. Remove moeda
+func (cm *CurrencyManagerDB) Remove(currency string) {
 
 }
