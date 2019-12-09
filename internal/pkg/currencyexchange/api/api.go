@@ -8,6 +8,7 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/rep/exchange/internal/pkg/commom/logging"
+	"github.com/rep/exchange/internal/pkg/commom/web"
 	"github.com/rep/exchange/internal/pkg/currencyexchange"
 )
 
@@ -46,15 +47,13 @@ func (v *Controller) Exchange(res http.ResponseWriter, req *http.Request, params
 
 	v.calculator.Exchange(from, to, amount)
 
-	res.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	res.WriteHeader(http.StatusOK)
+	value := struct {
+		Value float64
+	}{
+		Value: 123.45,
+	}
 
-	json.NewEncoder(res).Encode(
-		struct {
-			Value float64
-		}{
-			Value: 123.45,
-		},
-	)
+	hr := web.NewHTTPResponse(res, http.StatusOK, value, nil)
+	hr.WriteJSON()
 
 }
