@@ -34,6 +34,8 @@ type Redis struct {
 	Port     int    `default:"6379"`
 	User     string `required:"false"`
 	Password string `required:"false"`
+	// Prefixo de todas chaves
+	Prefix string `default:"exchange"`
 }
 
 // RedisDB representa configuração Redis em modo DB

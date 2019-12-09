@@ -47,7 +47,7 @@ func initializeApp(path string) (*app.ExchangeApp, error) {
 		return nil, err
 	}
 	loggerCurrency := logging.NewCurrency(loggingLevels)
-	currencyManagerDB := currencyexchange.NewCurrencyManagerDB(dbConnection, loggerCurrency)
+	currencyManagerDB := currencyexchange.NewCurrencyManagerDB(dbConnection, redisDB, loggerCurrency)
 	currencyManagerProxy := currencyexchange.NewCurrencyManagerProxy(currencyManagerDB, loggerCurrency)
 	loggerCalculator := logging.NewCalculator(loggingLevels)
 	calculatorController := currencyexchange.NewCalculatorController(currencyManagerProxy, loggerCalculator)

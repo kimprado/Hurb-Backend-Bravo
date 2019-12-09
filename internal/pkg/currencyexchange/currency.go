@@ -1,6 +1,9 @@
 package currencyexchange
 
 import (
+	"fmt"
+
+	"github.com/rep/exchange/internal/pkg/commom/config"
 	"github.com/rep/exchange/internal/pkg/commom/logging"
 	"github.com/rep/exchange/internal/pkg/infra/redis"
 )
@@ -59,13 +62,15 @@ func (cm *CurrencyManagerProxy) Remove(currency string) {
 // CurrencyManagerDB implementa CurrencyManager com acesso a DB
 type CurrencyManagerDB struct {
 	redisClient redis.DBConnection
+	redisCfg    config.RedisDB
 	logger      logging.LoggerCurrency
 }
 
 // NewCurrencyManagerDB é responsável por instanciar Controller
-func NewCurrencyManagerDB(r redis.DBConnection, l logging.LoggerCurrency) (c *CurrencyManagerDB) {
+func NewCurrencyManagerDB(r redis.DBConnection, cr config.RedisDB, l logging.LoggerCurrency) (c *CurrencyManagerDB) {
 	c = new(CurrencyManagerDB)
 	c.redisClient = r
+	c.redisCfg = cr
 	c.logger = l
 	return
 }
@@ -78,7 +83,7 @@ func (cm *CurrencyManagerDB) Find(currency string) (c *Currency, err error) {
 	defer con.Close()
 
 	var reply interface{}
-	reply, err = con.Do("SISMEMBER", "currency:supported", currency)
+	reply, err = con.Do("SISMEMBER", fmt.Sprintf("%s:currency:supported", cm.redisCfg.Prefix), currency)
 
 	if err != nil {
 		return

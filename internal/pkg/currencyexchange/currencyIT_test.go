@@ -13,7 +13,7 @@ func TestFindSupportedCurrency(t *testing.T) {
 
 	var err error
 
-	setUpFindSupportedCurrency()
+	setUpFindSupportedCurrency(t)
 	if err != nil {
 		t.Errorf("Erro ao preparar teste: %+v\n", err)
 		return
@@ -24,6 +24,8 @@ func TestFindSupportedCurrency(t *testing.T) {
 		t.Errorf("Erro ao criar Configuração: %+v\n", err)
 		return
 	}
+
+	c.RedisDB.Prefix = t.Name()
 
 	currencyManager, err := initializeCurrencyManagerDBTest(c)
 	if err != nil {
@@ -42,7 +44,11 @@ func TestFindSupportedCurrency(t *testing.T) {
 
 }
 
-func setUpFindSupportedCurrency() (err error) {
+// Cria carga de dados para teste.
+// Popula Redis com valores em nova chave para o teste.
+// Nome da chave se baseia no nome do teste, o que permite
+// executar testes de integração em paralelo :).
+func setUpFindSupportedCurrency(t *testing.T) (err error) {
 	currencyBRL := "BRL"
 
 	c, err := initializeConfigTest()
@@ -57,7 +63,7 @@ func setUpFindSupportedCurrency() (err error) {
 
 	con := redis.Get()
 
-	_, err = con.Do("SADD", "currency:supported", currencyBRL)
+	_, err = con.Do("SADD", t.Name()+":currency:supported", currencyBRL)
 
 	if err != nil {
 		return
