@@ -38,6 +38,7 @@ func (v *Controller) Exchange(res http.ResponseWriter, req *http.Request, params
 
 	if err != nil {
 		v.logger.Errorf("Consulta Exchange %+v\n", params)
+		res.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		res.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(res).Encode(fmt.Sprintf("Amount %q is invalid", strAmount))
 		return
