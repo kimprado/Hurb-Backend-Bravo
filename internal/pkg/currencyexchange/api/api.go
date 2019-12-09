@@ -52,13 +52,11 @@ func (v *Controller) Exchange(res http.ResponseWriter, req *http.Request, params
 
 	v.calculator.Exchange(from, to, amount)
 
-	value := struct {
-		Value float64
-	}{
-		Value: 123.45,
-	}
-
-	hr := web.NewHTTPResponse(res, http.StatusOK, value, nil)
-	hr.WriteJSON()
+	web.NewHTTPResponse(
+		res,
+		http.StatusOK,
+		struct{}{},
+		nil,
+	).WriteJSON()
 
 }
