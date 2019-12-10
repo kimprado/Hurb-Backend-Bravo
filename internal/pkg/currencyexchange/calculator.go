@@ -40,7 +40,6 @@ func NewCalculatorController(cm CurrencyManager, l logging.LoggerCalculator) (c 
 
 // Exchange executa conversão monetária
 func (c *CalculatorController) Exchange(from, to string, amount float64) (err error) {
-	// Validar moedas disponíveis para conversão
 	// Consultar taxas de câmbio
 	// Calcular conversão
 
