@@ -5,19 +5,16 @@ import (
 	"net/http"
 )
 
-// HTTPStatusCode representa HTTP Status Code
-type HTTPStatusCode int
-
 // HTTPResponse representa resposta ao cliente HTTP
 type HTTPResponse struct {
 	writer  http.ResponseWriter
-	code    HTTPStatusCode
+	code    int
 	value   interface{}
 	message error
 }
 
 // NewHTTPResponse cria instância de HTTPResponse
-func NewHTTPResponse(r http.ResponseWriter, c HTTPStatusCode, value interface{}, e error) (hr *HTTPResponse) {
+func NewHTTPResponse(r http.ResponseWriter, c int, value interface{}, e error) (hr *HTTPResponse) {
 	hr = new(HTTPResponse)
 	hr.writer = r
 	hr.code = c

@@ -82,7 +82,7 @@ func (v *Controller) Exchange(res http.ResponseWriter, req *http.Request, params
 
 		web.NewHTTPResponse(
 			res,
-			http.StatusBadRequest,
+			statusCode(paramErr),
 			nil,
 			paramErr,
 		).WriteJSON()
@@ -97,7 +97,7 @@ func (v *Controller) Exchange(res http.ResponseWriter, req *http.Request, params
 
 		web.NewHTTPResponse(
 			res,
-			http.StatusBadRequest,
+			statusCode(err),
 			nil,
 			err,
 		).WriteJSON()
