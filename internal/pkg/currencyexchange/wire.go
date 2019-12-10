@@ -18,7 +18,12 @@ func initializeRedisTest(config config.Configuration) (c redis.DBConnection, err
 	panic(wire.Build(pkgSetTest))
 }
 
-// initializeRedisTest inicializa DBConnection para testes
+// initializeRedisTest inicializa CurrencyManagerDB para testes
 func initializeCurrencyManagerDBTest(config config.Configuration) (c *CurrencyManagerDB, err error) {
+	panic(wire.Build(pkgSetTest))
+}
+
+// initializeRatesFinderService inicializa RatesFinderService para testes
+func initializeRatesFinderServiceTest(config config.Configuration) (c *RatesFinderService, err error) {
 	panic(wire.Build(pkgSetTest))
 }

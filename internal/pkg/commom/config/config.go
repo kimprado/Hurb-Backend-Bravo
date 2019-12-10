@@ -26,6 +26,10 @@ type Configuration struct {
 		File  string `required:"false"`
 		Level LoggingLevels
 	}
+
+	RatesFinder struct {
+		BaseCurrency string `required:"true"`
+	}
 }
 
 // Redis representa configuração de conexão Redis

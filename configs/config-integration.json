@@ -9,6 +9,9 @@
         "host": "localhost",
         "port": 6380
     },
+    "ratesfinder": {
+        "basecurrency": "USD"
+    },
     "logging": {
         "level": {
             "ROOT": "INFO",

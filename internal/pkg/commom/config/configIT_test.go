@@ -24,6 +24,9 @@ const configTemplate = `
     "redisDB": {
         "host": "host-IT-test",
         "port": 6379
+	},
+    "ratesfinder": {
+        "basecurrency": "USD"
     },
     "logging": {
         "level": {
@@ -45,16 +48,18 @@ func TestLoadConfig(t *testing.T) {
 	writeFile(f, fmt.Sprintf(configTemplate, dateTime))
 
 	expect := struct {
-		environment string
-		serverPort  string
-		redisDbHost string
-		redisDbPort int
-		logging     map[string]string
+		environment  string
+		serverPort   string
+		redisDbHost  string
+		redisDbPort  int
+		basecurrency string
+		logging      map[string]string
 	}{
-		environment: "test-" + dateTime,
-		serverPort:  "3080",
-		redisDbHost: "host-IT-test",
-		redisDbPort: 6379,
+		environment:  "test-" + dateTime,
+		serverPort:   "3080",
+		redisDbHost:  "host-IT-test",
+		redisDbPort:  6379,
+		basecurrency: "USD",
 		logging: map[string]string{
 			"ROOT": "INFO",
 		},
@@ -80,6 +85,9 @@ func TestLoadConfig(t *testing.T) {
 	}
 	if expect.redisDbPort != c.RedisDB.Port {
 		t.Errorf("redisDbPort esperado %q é diferente de %q\n", expect.redisDbPort, c.RedisDB.Port)
+	}
+	if expect.basecurrency != c.RatesFinder.BaseCurrency {
+		t.Errorf("basecurrency esperado %q é diferente de %q\n", expect.basecurrency, c.RatesFinder.BaseCurrency)
 	}
 
 	for k, v := range expect.logging {

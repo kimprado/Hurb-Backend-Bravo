@@ -9,6 +9,9 @@
         "host": "redis-test",
         "port": 6379
     },
+    "ratesfinder": {
+        "basecurrency": "USD"
+    },
     "logging": {
         "level": {
             "ROOT": "INFO",

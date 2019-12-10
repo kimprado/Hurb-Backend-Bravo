@@ -49,3 +49,32 @@ func newUnsupportedCurrencyError(param, value, currency string) (e *UnsupportedC
 func (e *UnsupportedCurrencyError) Error() string {
 	return e.ParametersError.Error()
 }
+
+// RateQuoteNotFoundError representa erro na consulta de cotação
+type RateQuoteNotFoundError struct {
+	*errors.ParametersError
+}
+
+// newUnsupportedCurrencyError cria instância de RateQuoteNotFoundError
+func newRateQuoteNotFoundError() (e *RateQuoteNotFoundError) {
+	e = new(RateQuoteNotFoundError)
+	e.ParametersError = errors.NewParametersError()
+	e.ParametersError.Title = "Falha na consulta consulta de Uma ou Mais Quotaçõs"
+	return
+}
+
+// AddQuote inclui erro de cotacação
+func (e *RateQuoteNotFoundError) AddQuote(currency string) string {
+	e.ParametersError.Add(
+		errors.ParameterError{
+			Name:   "",
+			Value:  currency,
+			Reason: fmt.Sprintf("Cotação da moeda %q indisponível", currency),
+		},
+	)
+	return e.ParametersError.Error()
+}
+
+func (e *RateQuoteNotFoundError) Error() string {
+	return e.ParametersError.Error()
+}

@@ -12,11 +12,13 @@ func statusCode(e error) (s int) {
 
 	switch v := e.(type) {
 	case *currencyexchange.LookupCurrencyError:
-		s = http.StatusServiceUnavailable
+		s = http.StatusServiceUnavailable // 503
 	case *currencyexchange.UnsupportedCurrencyError:
-		s = http.StatusBadRequest
+		s = http.StatusBadRequest // 400
+	case *currencyexchange.RateQuoteNotFoundError:
+		s = http.StatusServiceUnavailable // 503
 	case *errors.ParametersError:
-		s = http.StatusBadRequest
+		s = http.StatusBadRequest // 400
 	default:
 		panic(fmt.Sprintf("Tipo de erro não definido %T", v))
 	}

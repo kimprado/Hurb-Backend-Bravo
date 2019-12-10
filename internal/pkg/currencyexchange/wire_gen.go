@@ -45,3 +45,10 @@ func initializeCurrencyManagerDBTest(config2 config.Configuration) (*CurrencyMan
 	currencyManagerDB := NewCurrencyManagerDB(dbConnection, redisDB, loggerCurrency)
 	return currencyManagerDB, nil
 }
+
+func initializeRatesFinderServiceTest(config2 config.Configuration) (*RatesFinderService, error) {
+	loggingLevels := config.NewLoggingLevels(config2)
+	loggerCurrency := logging.NewCurrency(loggingLevels)
+	ratesFinderService := NewRatesFinderService(config2, loggerCurrency)
+	return ratesFinderService, nil
+}

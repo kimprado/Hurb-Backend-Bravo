@@ -20,7 +20,6 @@ type CurrencyManager interface {
 // Currency representa entidade monetária com valor associado
 type Currency struct {
 	code string
-	rate float64
 }
 
 func newCurrency(code string) (c *Currency) {

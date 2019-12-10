@@ -16,6 +16,7 @@ var PkgSet = wire.NewSet(
 	// Define que a implementação Padão de CurrencyManager é CurrencyManagerProxy
 	wire.Bind(new(CurrencyManager), new(*CurrencyManagerProxy)),
 	NewCurrencyManagerDB,
+	NewRatesFinderService,
 )
 
 var pkgSetConfigTest = wire.NewSet(
