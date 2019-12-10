@@ -8,29 +8,16 @@ import (
 // HTTPStatusCode representa HTTP Status Code
 type HTTPStatusCode int
 
-// ErrorMessage represneta mensagem de erro
-type ErrorMessage string
-
-// NewErrorMessage cria instância de ErrorMessage
-func NewErrorMessage(message string) (e *ErrorMessage) {
-	e = (*ErrorMessage)(&message)
-	return
-}
-
-func (em ErrorMessage) String() string {
-	return (string)(em)
-}
-
 // HTTPResponse representa resposta ao cliente HTTP
 type HTTPResponse struct {
 	writer  http.ResponseWriter
 	code    HTTPStatusCode
 	value   interface{}
-	message *ErrorMessage
+	message error
 }
 
 // NewHTTPResponse cria instância de HTTPResponse
-func NewHTTPResponse(r http.ResponseWriter, c HTTPStatusCode, value interface{}, e *ErrorMessage) (hr *HTTPResponse) {
+func NewHTTPResponse(r http.ResponseWriter, c HTTPStatusCode, value interface{}, e error) (hr *HTTPResponse) {
 	hr = new(HTTPResponse)
 	hr.writer = r
 	hr.code = c
@@ -48,13 +35,7 @@ func (hr *HTTPResponse) WriteJSON() (err error) {
 	hr.writer.WriteHeader(int(hr.code))
 
 	if hr.message != nil {
-		json.NewEncoder(hr.writer).Encode(
-			struct {
-				Message string `json:"message"`
-			}{
-				Message: hr.message.String(),
-			},
-		)
+		json.NewEncoder(hr.writer).Encode(hr.message)
 		return
 
 	}
