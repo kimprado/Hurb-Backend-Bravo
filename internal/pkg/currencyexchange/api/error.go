@@ -13,6 +13,8 @@ func statusCode(e error) (s int) {
 	switch v := e.(type) {
 	case *currencyexchange.LookupCurrencyError:
 		s = http.StatusServiceUnavailable
+	case *currencyexchange.UnsupportedCurrencyError:
+		s = http.StatusBadRequest
 	case *errors.ParametersError:
 		s = http.StatusBadRequest
 	default:

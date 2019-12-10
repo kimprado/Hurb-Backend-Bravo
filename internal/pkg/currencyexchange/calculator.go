@@ -49,10 +49,18 @@ func (c *CalculatorController) Exchange(from, to string, amount float64) (err er
 		err = newLookupCurrencyError(from)
 		return
 	}
+	if curFrom == nil {
+		err = newUnsupportedCurrencyError("from", from, from)
+		return
+	}
 
 	curTo, err := c.cm.Find(to)
 	if err != nil {
 		err = newLookupCurrencyError(to)
+		return
+	}
+	if curTo == nil {
+		err = newUnsupportedCurrencyError("to", to, to)
 		return
 	}
 
