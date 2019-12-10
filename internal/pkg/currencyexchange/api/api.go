@@ -90,7 +90,20 @@ func (v *Controller) Exchange(res http.ResponseWriter, req *http.Request, params
 		return
 	}
 
-	v.calculator.Exchange(from, to, amount)
+	err = v.calculator.Exchange(from, to, amount)
+
+	if err != nil {
+		v.logger.Warnf("Erro ao realizar Exchange: %v\n", err)
+
+		web.NewHTTPResponse(
+			res,
+			http.StatusBadRequest,
+			nil,
+			err,
+		).WriteJSON()
+
+		return
+	}
 
 	web.NewHTTPResponse(
 		res,

@@ -14,27 +14,27 @@ func (e *Wrap) Unwrap() error {
 	return e.Err
 }
 
-// Error representa informações sobre erro
-type Error struct {
+// GenericError representa informações sobre erro
+type GenericError struct {
 	Title  string `json:"title"`
 	Detail string `json:"detail"`
 }
 
-// NewError cria instância de Error
-func NewError(title, detail string) (e *Error) {
-	e = new(Error)
+// NewGenericError cria instância de GenericError
+func NewGenericError(title, detail string) (e *GenericError) {
+	e = new(GenericError)
 	e.Title = title
 	e.Detail = detail
 	return
 }
 
-func (e *Error) Error() string {
+func (e *GenericError) Error() string {
 	return fmt.Sprintf("%s[%s]", e.Title, e.Detail)
 }
 
 // DomainError representa erros do domínio da aplicação
 type DomainError struct {
-	Error
+	GenericError
 }
 
 // NewDomainError cria instância de DomainError
