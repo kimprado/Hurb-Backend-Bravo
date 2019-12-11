@@ -14,7 +14,7 @@ func TestCalculatorControllerExchangeAmount(t *testing.T) {
 	var err error
 
 	//TODO: Praparar Mock Objects dos Serviços
-	calculator, err := initializeCalculatorControllerTest(nil, nil, nil)
+	calculator, err := initializeCalculatorControllerTest(nil, nil)
 	if err != nil {
 		t.Errorf("Criação serviço %v\n", err)
 		return
