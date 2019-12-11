@@ -9,7 +9,7 @@ import (
 // da aplicação. O controlador do domínio.
 type Calculator interface {
 	// Calcula câmbio monetário
-	Exchange(from, to string, amount float64) (err error)
+	Exchange(from, to string, amount float64) (ex *ExchangeValue, err error)
 }
 
 // CurrencyAdder é um ponto de entrada para comportamento
@@ -29,20 +29,22 @@ type CurrencyRemover interface {
 type CalculatorController struct {
 	cm     CurrencyManager
 	rf     RatesFinder
+	ex     Exchanger
 	logger logging.LoggerCalculator
 }
 
 // NewCalculatorController é responsável por instanciar Controller
-func NewCalculatorController(cm CurrencyManager, rf RatesFinder, l logging.LoggerCalculator) (c *CalculatorController) {
+func NewCalculatorController(cm CurrencyManager, rf RatesFinder, ex Exchanger, l logging.LoggerCalculator) (c *CalculatorController) {
 	c = new(CalculatorController)
 	c.cm = cm
 	c.rf = rf
+	c.ex = ex
 	c.logger = l
 	return
 }
 
 // Exchange executa conversão monetária
-func (c *CalculatorController) Exchange(from, to string, amount float64) (err error) {
+func (c *CalculatorController) Exchange(from, to string, amount float64) (ex *ExchangeValue, err error) {
 	// Calcular conversão
 
 	curFrom, err := c.cm.Find(from)
@@ -72,8 +74,17 @@ func (c *CalculatorController) Exchange(from, to string, amount float64) (err er
 		err = errors.GetDomainErrorOr(err, newLookupRatesQuoteError())
 		return
 	}
+	if len(rates) != 2 {
+		err = newRateQuoteNotFoundError()
+		return
+	}
+
+	rFrom := rates[from]
+	rTo := rates[to]
 
 	c.logger.Tracef("Taxas de câmbio: %v\n", rates)
+
+	ex, err = c.ex.Exchange(*rFrom, *rTo, amount)
 
 	return
 }

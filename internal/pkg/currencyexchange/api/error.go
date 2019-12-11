@@ -19,6 +19,8 @@ func statusCode(e error) (s int) {
 		s = http.StatusBadRequest // 400
 	case *currencyexchange.CurrencyRateQuoteNotFoundError:
 		s = http.StatusServiceUnavailable // 503
+	case *currencyexchange.RateQuoteNotFoundError:
+		s = http.StatusInternalServerError // 500
 	case *currencyexchange.LookupRatesQuoteError:
 		s = http.StatusServiceUnavailable // 503
 	case *errors.ParametersError:

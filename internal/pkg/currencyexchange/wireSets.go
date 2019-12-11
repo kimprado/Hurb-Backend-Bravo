@@ -21,6 +21,9 @@ var PkgSet = wire.NewSet(
 	wire.Bind(new(RatesFinder), new(*RatesFinderProxy)),
 	NewRatesFinderCache,
 	NewRatesFinderService,
+	NewCurrencyExchanger,
+	// Define que a implementação Padão de Exchanger é CurrencyExchanger
+	wire.Bind(new(Exchanger), new(*CurrencyExchanger)),
 )
 
 var pkgSetConfigTest = wire.NewSet(

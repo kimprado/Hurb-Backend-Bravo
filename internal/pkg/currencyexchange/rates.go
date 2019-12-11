@@ -25,6 +25,11 @@ type RatesFinder interface {
 // Quote representa valor de uma cotação
 type Quote float64
 
+func (q Quote) float64() (f float64) {
+	f = (float64)(q)
+	return
+}
+
 // BaseCurrency representa moeda de lastro
 type BaseCurrency string
 
@@ -182,9 +187,9 @@ func (rf *RatesFinderCache) Find(cs ...Currency) (r map[string]*Rate, err error)
 	for _, r := range newerRates {
 		if v, ok := rf.cache[r.currency.Code()]; ok && !v.Active() {
 			v.renew(r, rf.timeout)
-			continue
+		} else {
+			rf.cache[r.currency.Code()] = newRateChacheEntry(r, rf.timeout, rf.logger)
 		}
-		rf.cache[r.currency.Code()] = newRateChacheEntry(r, rf.timeout, rf.logger)
 		rates[r.currency.Code()] = r
 	}
 	r = rates

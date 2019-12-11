@@ -78,6 +78,25 @@ func (e *CurrencyRateQuoteNotFoundError) Error() string {
 	return e.ParametersError.Error()
 }
 
+// RateQuoteNotFoundError representa erro de cotação não retornada pela consulta
+type RateQuoteNotFoundError struct {
+	*errors.GenericError
+}
+
+// newRateQuoteNotFoundError cria instância de RateQuoteNotFoundError
+func newRateQuoteNotFoundError() (e *RateQuoteNotFoundError) {
+	e = new(RateQuoteNotFoundError)
+	e.GenericError = errors.NewGenericError(
+		"Falha na consulta de cotações",
+		fmt.Sprintf("Uma ou Mais contações não puderam ser recuperadas"),
+	)
+	return
+}
+
+func (e *RateQuoteNotFoundError) Error() string {
+	return e.GenericError.Error()
+}
+
 // RateQuoteServiceParametersError representa erro de parâmetros na consulta
 // ao serviço de cotação
 type RateQuoteServiceParametersError struct {
