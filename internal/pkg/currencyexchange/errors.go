@@ -59,7 +59,7 @@ type RateQuoteNotFoundError struct {
 func newRateQuoteNotFoundError() (e *RateQuoteNotFoundError) {
 	e = new(RateQuoteNotFoundError)
 	e.ParametersError = errors.NewParametersError()
-	e.ParametersError.Title = "Falha na consulta consulta de Uma ou Mais Quotaçõs"
+	e.ParametersError.Title = "Falha na consulta de Uma ou Mais Cotações"
 	return
 }
 
