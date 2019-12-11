@@ -274,19 +274,8 @@ func (entry *rateChacheEntry) verifyAndMakeInvalid() {
 	go func() {
 		time.Sleep(entry.timeout.duration())
 		entry.active = false
+		entry.logger.Tracef("Entrada %q removida do cache\n", entry.rate.currency.Code())
 	}()
-
-	if entry.logger.IsTraceEnabled() {
-		go func() {
-			for {
-				time.Sleep(time.Second * 3)
-				if entry.active == false {
-					entry.logger.Tracef("Entrada %q removida do cache\n", entry.rate.currency.Code())
-					return
-				}
-			}
-		}()
-	}
 }
 
 // RatesFinderProxy implementa proxy para RatesFinders
