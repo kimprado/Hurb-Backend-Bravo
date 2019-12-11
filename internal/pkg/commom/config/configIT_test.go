@@ -26,7 +26,8 @@ const configTemplate = `
         "port": 6379
 	},
     "ratesfinder": {
-        "basecurrency": "USD"
+        "basecurrency": "USD",
+        "entrytimeout": 60
     },
     "logging": {
         "level": {
@@ -53,6 +54,7 @@ func TestLoadConfig(t *testing.T) {
 		redisDbHost  string
 		redisDbPort  int
 		basecurrency string
+		entrytimeout time.Duration
 		logging      map[string]string
 	}{
 		environment:  "test-" + dateTime,
@@ -60,6 +62,7 @@ func TestLoadConfig(t *testing.T) {
 		redisDbHost:  "host-IT-test",
 		redisDbPort:  6379,
 		basecurrency: "USD",
+		entrytimeout: 60,
 		logging: map[string]string{
 			"ROOT": "INFO",
 		},
@@ -88,6 +91,9 @@ func TestLoadConfig(t *testing.T) {
 	}
 	if expect.basecurrency != c.RatesFinder.BaseCurrency {
 		t.Errorf("basecurrency esperado %q é diferente de %q\n", expect.basecurrency, c.RatesFinder.BaseCurrency)
+	}
+	if expect.entrytimeout != c.RatesFinder.EntryTimeout {
+		t.Errorf("entrytimeout esperado %q é diferente de %q\n", expect.entrytimeout, c.RatesFinder.EntryTimeout)
 	}
 
 	for k, v := range expect.logging {

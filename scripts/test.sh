@@ -20,6 +20,8 @@ case "$1" in
         EXCHANGE_SERVER_PORT="4033" \
         EXCHANGE_REDISDB_HOST="host-env-test" \
         EXCHANGE_REDISDB_PORT="6523" \
+        EXCHANGE_RATESFINDER_BASECURRENCY="USD" \
+        EXCHANGE_RATESFINDER_ENTRYTIMEOUT="60" \
         EXCHANGE_LOGGING_LEVEL="ROOT: WARN-teste" \
         go test ./... -tags="testenvvars" -cover -coverprofile=coverage.out
         go tool cover -func=coverage.out | tail -n 1

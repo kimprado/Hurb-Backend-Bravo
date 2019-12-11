@@ -65,7 +65,7 @@ func (c *CalculatorController) Exchange(from, to string, amount float64) (err er
 		return
 	}
 
-	c.logger.Debugf("Calculando câmbio com moedas: %v | %v\n", curFrom, curTo)
+	c.logger.Tracef("Calculando câmbio com moedas: %v | %v\n", curFrom, curTo)
 
 	rates, err := c.rf.Find(*curFrom, *curTo)
 	if err != nil {

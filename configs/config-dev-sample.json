@@ -10,12 +10,14 @@
         "port": 6379
     },
     "ratesfinder": {
-        "basecurrency": "USD"
+        "basecurrency": "USD",
+        "entrytimeout": 60
     },
     "logging": {
         "level": {
             "ROOT": "INFO",
-            "currencyexchange.calculator": "TRACE",
+            "currencyexchange.calculator": "DEBUG",
+            "currencyexchange.rates.cache": "DEBUG",
             "infra.redis.db": "INFO",
             "webserver": "INFO"
         }

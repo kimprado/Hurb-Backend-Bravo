@@ -10,7 +10,8 @@
         "port": 6380
     },
     "ratesfinder": {
-        "basecurrency": "USD"
+        "basecurrency": "USD",
+        "entrytimeout": 60
     },
     "logging": {
         "level": {

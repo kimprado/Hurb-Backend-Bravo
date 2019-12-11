@@ -11,6 +11,7 @@ var PkgSet = wire.NewSet(
 	NewCalculator,
 	NewCurrency,
 	NewRates,
+	NewRatesCache,
 	NewRedisDB,
 	NewWebServer,
 )

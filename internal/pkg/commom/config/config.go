@@ -2,6 +2,7 @@ package config
 
 import (
 	"flag"
+	"time"
 
 	"github.com/jinzhu/configor"
 )
@@ -28,7 +29,8 @@ type Configuration struct {
 	}
 
 	RatesFinder struct {
-		BaseCurrency string `required:"true"`
+		BaseCurrency string        `required:"true"`
+		EntryTimeout time.Duration `required:"true"`
 	}
 }
 

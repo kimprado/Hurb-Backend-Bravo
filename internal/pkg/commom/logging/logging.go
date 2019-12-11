@@ -30,6 +30,11 @@ type LoggerRates struct {
 	l.Logger
 }
 
+// LoggerRatesCache para logar currencyexchange.rates.cache
+type LoggerRatesCache struct {
+	l.Logger
+}
+
 // LoggerRedisDB para logar infra.redis.db
 type LoggerRedisDB struct {
 	l.Logger
@@ -66,7 +71,13 @@ func NewCurrency(configLevels config.LoggingLevels) (log LoggerCurrency) {
 
 // NewRates cria Logger "currencyexchange.rates"
 func NewRates(configLevels config.LoggingLevels) (log LoggerRates) {
-	log = LoggerRates{l.NewLogger("currencyexchange.currency", configLevels)}
+	log = LoggerRates{l.NewLogger("currencyexchange.rates", configLevels)}
+	return
+}
+
+// NewRatesCache cria Logger "currencyexchange.rates.cache"
+func NewRatesCache(configLevels config.LoggingLevels) (log LoggerRatesCache) {
+	log = LoggerRatesCache{l.NewLogger("currencyexchange.rates.cache", configLevels)}
 	return
 }
 

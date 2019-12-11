@@ -1,3 +1,5 @@
+// +build test integration
+
 package currencyexchange
 
 import (
