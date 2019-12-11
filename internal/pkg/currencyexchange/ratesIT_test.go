@@ -1,5 +1,3 @@
-// +build test integration
-
 package currencyexchange
 
 import (
@@ -33,17 +31,32 @@ func TestFindRatesQuote(t *testing.T) {
 		errExpected error
 	}{
 		{"BRL", "EUR", nil},
+		{"BRL", "USD", nil},
+		{"EUR", "BRL", nil},
+		{"EUR", "USD", nil},
+		{"USD", "BRL", nil},
+		{"USD", "EUR", nil},
+		{"", "BRL", &RateQuoteServiceParametersError{}},
+		{"BRL", "", &RateQuoteServiceParametersError{}},
+		{"BRLs", "EUR", &RateQuoteServiceParametersError{}},
+		{"EUR", "BRLs", &RateQuoteServiceParametersError{}},
 	}
 	for _, tc := range testCases {
 		t.Run("", func(t *testing.T) {
 			result, err := ratesFinder.Find(Currency{tc.curFrom}, Currency{tc.curTo})
 
-			if tc.errExpected == nil && err != nil {
-				t.Errorf("Error inesperado %v", err)
+			if err != nil && tc.errExpected == nil {
+				t.Errorf("Erro inesperado %v", err)
 				return
 			}
 
-			if got := errors.Is(err, tc.errExpected); !got && tc.errExpected != nil {
+			got := errors.Is(err, tc.errExpected)
+
+			if got && tc.errExpected != nil {
+				return
+			}
+
+			if !got && tc.errExpected != nil {
 				t.Errorf("Esperado erro %v, mas obtido %v", tc.errExpected, err)
 				return
 			}

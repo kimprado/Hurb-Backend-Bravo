@@ -55,7 +55,7 @@ type RateQuoteNotFoundError struct {
 	*errors.ParametersError
 }
 
-// newUnsupportedCurrencyError cria instância de RateQuoteNotFoundError
+// newRateQuoteNotFoundError cria instância de RateQuoteNotFoundError
 func newRateQuoteNotFoundError() (e *RateQuoteNotFoundError) {
 	e = new(RateQuoteNotFoundError)
 	e.ParametersError = errors.NewParametersError()
@@ -63,8 +63,8 @@ func newRateQuoteNotFoundError() (e *RateQuoteNotFoundError) {
 	return
 }
 
-// AddQuote inclui erro de cotacação
-func (e *RateQuoteNotFoundError) AddQuote(currency string) string {
+// Add inclui erro de cotacação
+func (e *RateQuoteNotFoundError) Add(currency string) {
 	e.ParametersError.Add(
 		errors.ParameterError{
 			Name:   "",
@@ -72,9 +72,46 @@ func (e *RateQuoteNotFoundError) AddQuote(currency string) string {
 			Reason: fmt.Sprintf("Cotação da moeda %q indisponível", currency),
 		},
 	)
-	return e.ParametersError.Error()
 }
 
 func (e *RateQuoteNotFoundError) Error() string {
 	return e.ParametersError.Error()
+}
+
+// RateQuoteServiceParametersError representa erro de parâmetros na consulta
+// ao serviço de cotação
+type RateQuoteServiceParametersError struct {
+	*errors.ParametersError
+}
+
+// newRateQuoteServiceParametersError cria instância de RateQuoteServiceParametersError
+func newRateQuoteServiceParametersError() (e *RateQuoteServiceParametersError) {
+	e = new(RateQuoteServiceParametersError)
+	e.ParametersError = errors.NewParametersError()
+	e.ParametersError.Title = "Um ou Mais parâmetros não são válidos no Serviço Externo de Cotações"
+	return
+}
+
+// Add inclui erro de cotacação
+func (e *RateQuoteServiceParametersError) Add(currency string) {
+	e.ParametersError.Add(
+		errors.ParameterError{
+			Name:   "",
+			Value:  currency,
+			Reason: fmt.Sprintf("Verificar se moeda %q é válida para cotação ou lastro", currency),
+		},
+	)
+}
+
+func (e *RateQuoteServiceParametersError) Error() string {
+	return e.ParametersError.Error()
+}
+
+// Is informa se target == e
+func (e *RateQuoteServiceParametersError) Is(target error) bool {
+	_, ok := target.(*RateQuoteServiceParametersError)
+	if !ok {
+		return false
+	}
+	return true
 }

@@ -2,6 +2,7 @@ package currencyexchange
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -11,6 +12,8 @@ import (
 )
 
 const baseURL = "https://api.exchangeratesapi.io/latest?base=%s&symbols=%s"
+
+var errHTTPStatusBadRequest = errors.New("HTTP Bad Request")
 
 // RatesFinder pesquisa taxas de câmbio.
 type RatesFinder interface {
@@ -58,6 +61,15 @@ func (rf *RatesFinderService) Find(cs ...Currency) (rates map[string]*Rate, err 
 	var dto RatesDTO
 	err = sendRequest(urlQuery(rf.baseCurrency, cs...), &dto)
 
+	if err == errHTTPStatusBadRequest {
+		pmError := newRateQuoteServiceParametersError()
+		pmError.Add((string)(rf.baseCurrency))
+		for _, c := range cs {
+			pmError.Add(c.Code())
+		}
+		err = pmError
+		return
+	}
 	if err != nil {
 		return
 	}
@@ -67,7 +79,7 @@ func (rf *RatesFinderService) Find(cs ...Currency) (rates map[string]*Rate, err 
 
 		quote, ok := dto.Rates[c.Code()]
 		if !ok {
-			nfError.AddQuote(c.Code())
+			nfError.Add(c.Code())
 		}
 		rates[c.Code()] = NewRate(c, quote)
 	}
@@ -89,6 +101,10 @@ func sendRequest(url string, result interface{}) error {
 	resp, err := client.Do(req)
 	if err != nil {
 		return err
+	}
+
+	if resp.StatusCode == http.StatusBadRequest {
+		return errHTTPStatusBadRequest
 	}
 
 	decoder := json.NewDecoder(resp.Body)
