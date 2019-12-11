@@ -41,13 +41,14 @@ func NewRate(c Currency, q Quote) (r *Rate) {
 }
 
 // RatesFinderService responsável por consultar cotações de câmbio
+// Usa serviço externo (exchangeratesapi.io)
 type RatesFinderService struct {
 	baseCurrency BaseCurrency
-	logger       logging.LoggerCurrency
+	logger       logging.LoggerRates
 }
 
 // NewRatesFinderService é responsável por criar RatesFinderService
-func NewRatesFinderService(c config.Configuration, l logging.LoggerCurrency) (rf *RatesFinderService) {
+func NewRatesFinderService(c config.Configuration, l logging.LoggerRates) (rf *RatesFinderService) {
 	rf = new(RatesFinderService)
 	rf.baseCurrency = (BaseCurrency)(c.RatesFinder.BaseCurrency)
 	rf.logger = l
@@ -118,5 +119,25 @@ func urlQuery(b BaseCurrency, cs ...Currency) (u string) {
 		currencyCodes = append(currencyCodes, c.Code())
 	}
 	u = fmt.Sprintf(baseURL, b, strings.Join(currencyCodes, ","))
+	return
+}
+
+// RatesFinderProxy implementa proxy para RatesFinders
+type RatesFinderProxy struct {
+	service RatesFinder
+	logger  logging.LoggerRates
+}
+
+// NewRatesFinderProxy é responsável por instanciar RatesFinderProxy
+func NewRatesFinderProxy(s *RatesFinderService, l logging.LoggerRates) (c *RatesFinderProxy) {
+	c = new(RatesFinderProxy)
+	c.service = s
+	c.logger = l
+	return
+}
+
+// Find delega para outras implementações. Consulta Taxas de Câmbio para moedas
+func (cm *RatesFinderProxy) Find(cs ...Currency) (rates map[string]*Rate, err error) {
+	rates, err = cm.service.Find(cs...)
 	return
 }

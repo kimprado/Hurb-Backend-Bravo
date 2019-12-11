@@ -48,7 +48,7 @@ func initializeCurrencyManagerDBTest(config2 config.Configuration) (*CurrencyMan
 
 func initializeRatesFinderServiceTest(config2 config.Configuration) (*RatesFinderService, error) {
 	loggingLevels := config.NewLoggingLevels(config2)
-	loggerCurrency := logging.NewCurrency(loggingLevels)
-	ratesFinderService := NewRatesFinderService(config2, loggerCurrency)
+	loggerRates := logging.NewRates(loggingLevels)
+	ratesFinderService := NewRatesFinderService(config2, loggerRates)
 	return ratesFinderService, nil
 }

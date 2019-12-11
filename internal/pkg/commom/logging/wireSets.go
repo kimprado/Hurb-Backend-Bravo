@@ -10,6 +10,7 @@ var PkgSet = wire.NewSet(
 	NewLoggerAPIExchange,
 	NewCalculator,
 	NewCurrency,
+	NewRates,
 	NewRedisDB,
 	NewWebServer,
 )
