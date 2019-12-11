@@ -39,6 +39,13 @@ var pkgSetTest = wire.NewSet(
 	redis.PkgSet,
 )
 
+var pkgSetCalculatorMocksTest = wire.NewSet(
+	NewCalculatorController,
+	NewCurrencyExchanger,
+	pkgSetConfigTest,
+	logging.PkgSet,
+)
+
 func newIntegrationConfigFile() string {
 	return "../../../configs/config-integration.json"
 }

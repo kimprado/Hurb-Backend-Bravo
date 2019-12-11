@@ -27,3 +27,8 @@ func initializeCurrencyManagerDBTest(config config.Configuration) (c *CurrencyMa
 func initializeRatesFinderServiceTest(config config.Configuration) (c *RatesFinderService, err error) {
 	panic(wire.Build(pkgSetTest))
 }
+
+// initializeCalculatorControllerTest inicializa CalculatorController para testes de unidade
+func initializeCalculatorControllerTest(cm CurrencyManager, rf RatesFinder, ex Exchanger) (c *CalculatorController, err error) {
+	panic(wire.Build(pkgSetCalculatorMocksTest))
+}
