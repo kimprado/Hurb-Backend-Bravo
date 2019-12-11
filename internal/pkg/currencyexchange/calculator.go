@@ -1,6 +1,7 @@
 package currencyexchange
 
 import (
+	"github.com/rep/exchange/internal/pkg/commom/errors"
 	"github.com/rep/exchange/internal/pkg/commom/logging"
 )
 
@@ -27,20 +28,21 @@ type CurrencyRemover interface {
 // da aplicação. Implementação do controlador do domínio.
 type CalculatorController struct {
 	cm     CurrencyManager
+	rf     RatesFinder
 	logger logging.LoggerCalculator
 }
 
 // NewCalculatorController é responsável por instanciar Controller
-func NewCalculatorController(cm CurrencyManager, l logging.LoggerCalculator) (c *CalculatorController) {
+func NewCalculatorController(cm CurrencyManager, rf RatesFinder, l logging.LoggerCalculator) (c *CalculatorController) {
 	c = new(CalculatorController)
 	c.cm = cm
+	c.rf = rf
 	c.logger = l
 	return
 }
 
 // Exchange executa conversão monetária
 func (c *CalculatorController) Exchange(from, to string, amount float64) (err error) {
-	// Consultar taxas de câmbio
 	// Calcular conversão
 
 	curFrom, err := c.cm.Find(from)
@@ -64,6 +66,14 @@ func (c *CalculatorController) Exchange(from, to string, amount float64) (err er
 	}
 
 	c.logger.Debugf("Calculando câmbio com moedas: %v | %v\n", curFrom, curTo)
+
+	rates, err := c.rf.Find(*curFrom, *curTo)
+	if err != nil {
+		err = errors.GetDomainErrorOr(err, newLookupRatesQuoteError())
+		return
+	}
+
+	c.logger.Tracef("Taxas de câmbio: %v\n", rates)
 
 	return
 }

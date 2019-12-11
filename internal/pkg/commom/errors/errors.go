@@ -1,6 +1,7 @@
 package errors
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -45,6 +46,10 @@ func NewDomainError(title, detail string) (e *DomainError) {
 	return
 }
 
+func (e *DomainError) Error() string {
+	return fmt.Sprintf("%s", e)
+}
+
 // ParametersError representa informações sobre erro de parâmetros
 type ParametersError struct {
 	Title             string           `json:"title"`
@@ -78,4 +83,15 @@ type ParameterError struct {
 	Name   string `json:"name"`
 	Value  string `json:"value"`
 	Reason string `json:"reason"`
+}
+
+// GetDomainErrorOr retorna fromErr caso seja do tipo DomainError,
+// caso contrário defaultErr.
+func GetDomainErrorOr(fromErr error, defaultErr error) (e error) {
+	if got := errors.Is(fromErr, &DomainError{}); got {
+		e = fromErr
+		return
+	}
+	e = defaultErr
+	return
 }

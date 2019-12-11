@@ -15,7 +15,7 @@
     "logging": {
         "level": {
             "ROOT": "INFO",
-            "currencyexchange.calculator": "DEBUG",
+            "currencyexchange.calculator": "TRACE",
             "infra.redis.db": "INFO",
             "webserver": "INFO"
         }

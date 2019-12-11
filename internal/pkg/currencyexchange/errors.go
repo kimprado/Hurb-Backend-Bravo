@@ -50,21 +50,21 @@ func (e *UnsupportedCurrencyError) Error() string {
 	return e.ParametersError.Error()
 }
 
-// RateQuoteNotFoundError representa erro na consulta de cotação
-type RateQuoteNotFoundError struct {
+// CurrencyRateQuoteNotFoundError representa erro de cotação não encontrada para moeda
+type CurrencyRateQuoteNotFoundError struct {
 	*errors.ParametersError
 }
 
-// newRateQuoteNotFoundError cria instância de RateQuoteNotFoundError
-func newRateQuoteNotFoundError() (e *RateQuoteNotFoundError) {
-	e = new(RateQuoteNotFoundError)
+// newCurrencyRateQuoteNotFoundError cria instância de CurrencyRateQuoteNotFoundError
+func newCurrencyRateQuoteNotFoundError() (e *CurrencyRateQuoteNotFoundError) {
+	e = new(CurrencyRateQuoteNotFoundError)
 	e.ParametersError = errors.NewParametersError()
 	e.ParametersError.Title = "Falha na consulta de Uma ou Mais Cotações"
 	return
 }
 
 // Add inclui erro de cotacação
-func (e *RateQuoteNotFoundError) Add(currency string) {
+func (e *CurrencyRateQuoteNotFoundError) Add(currency string) {
 	e.ParametersError.Add(
 		errors.ParameterError{
 			Name:   "",
@@ -74,7 +74,7 @@ func (e *RateQuoteNotFoundError) Add(currency string) {
 	)
 }
 
-func (e *RateQuoteNotFoundError) Error() string {
+func (e *CurrencyRateQuoteNotFoundError) Error() string {
 	return e.ParametersError.Error()
 }
 
@@ -107,11 +107,34 @@ func (e *RateQuoteServiceParametersError) Error() string {
 	return e.ParametersError.Error()
 }
 
-// Is informa se target == e
+// Is informa se target == e. Verifica se e é do tipo
+// RateQuoteServiceParametersError, DomainError.
 func (e *RateQuoteServiceParametersError) Is(target error) bool {
-	_, ok := target.(*RateQuoteServiceParametersError)
-	if !ok {
+	switch target.(type) {
+	case *RateQuoteServiceParametersError:
+		return true
+	case *errors.DomainError:
+		return true
+	default:
 		return false
 	}
-	return true
+}
+
+// LookupRatesQuoteError representa erro na pesquisa de Taxas de Câmbio
+type LookupRatesQuoteError struct {
+	*errors.GenericError
+}
+
+// newLookupRatesQuoteError cria instância de LookupRatesQuoteError
+func newLookupRatesQuoteError() (e *LookupRatesQuoteError) {
+	e = new(LookupRatesQuoteError)
+	e.GenericError = errors.NewGenericError(
+		"Falha na consulta de Taxas de Câmbio",
+		fmt.Sprintf("Não foi possível consultar Taxas de Câmbio"),
+	)
+	return
+}
+
+func (e *LookupRatesQuoteError) Error() string {
+	return e.GenericError.Error()
 }

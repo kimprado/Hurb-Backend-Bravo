@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/rep/exchange/internal/pkg/commom/config"
 	"github.com/rep/exchange/internal/pkg/commom/logging"
@@ -37,6 +38,11 @@ func NewRate(c Currency, q Quote) (r *Rate) {
 	r = new(Rate)
 	r.currency = c
 	r.quote = q
+	return
+}
+
+func (r *Rate) String() (s string) {
+	s = fmt.Sprintf("%v %.6f", r.currency.Code(), (float64)(r.quote))
 	return
 }
 
@@ -75,7 +81,7 @@ func (rf *RatesFinderService) Find(cs ...Currency) (rates map[string]*Rate, err 
 		return
 	}
 
-	nfError := newRateQuoteNotFoundError()
+	nfError := newCurrencyRateQuoteNotFoundError()
 	for _, c := range cs {
 
 		quote, ok := dto.Rates[c.Code()]
@@ -93,7 +99,9 @@ func (rf *RatesFinderService) Find(cs ...Currency) (rates map[string]*Rate, err 
 }
 
 func sendRequest(url string, result interface{}) error {
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: time.Second * 30,
+	}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return err
