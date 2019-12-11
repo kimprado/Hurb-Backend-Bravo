@@ -45,6 +45,8 @@ func TestFindRatesQuote(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run("", func(t *testing.T) {
+			t.Parallel()
+
 			result, err := ratesFinder.Find(Currency{tc.curFrom}, Currency{tc.curTo})
 
 			if err != nil && tc.errExpected == nil {
