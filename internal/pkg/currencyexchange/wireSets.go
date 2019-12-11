@@ -42,6 +42,8 @@ var pkgSetTest = wire.NewSet(
 var pkgSetCalculatorMocksTest = wire.NewSet(
 	NewCalculatorController,
 	NewCurrencyExchanger,
+	// Define que a implementação Padão de Exchanger é CurrencyExchanger
+	wire.Bind(new(Exchanger), new(*CurrencyExchanger)),
 	pkgSetConfigTest,
 	logging.PkgSet,
 )

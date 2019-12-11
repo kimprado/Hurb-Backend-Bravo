@@ -53,7 +53,8 @@ func initializeRatesFinderServiceTest(config2 config.Configuration) (*RatesFinde
 	return ratesFinderService, nil
 }
 
-func initializeCalculatorControllerTest(cm CurrencyManager, rf RatesFinder, ex Exchanger) (*CalculatorController, error) {
+func initializeCalculatorControllerTest(cm CurrencyManager, rf RatesFinder) (*CalculatorController, error) {
+	currencyExchanger := NewCurrencyExchanger()
 	string2 := newIntegrationConfigFile()
 	configuration, err := config.NewConfig(string2)
 	if err != nil {
@@ -61,6 +62,6 @@ func initializeCalculatorControllerTest(cm CurrencyManager, rf RatesFinder, ex E
 	}
 	loggingLevels := config.NewLoggingLevels(configuration)
 	loggerCalculator := logging.NewCalculator(loggingLevels)
-	calculatorController := NewCalculatorController(cm, rf, ex, loggerCalculator)
+	calculatorController := NewCalculatorController(cm, rf, currencyExchanger, loggerCalculator)
 	return calculatorController, nil
 }
