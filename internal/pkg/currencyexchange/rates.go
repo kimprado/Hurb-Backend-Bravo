@@ -130,6 +130,27 @@ func urlQuery(b BaseCurrency, cs ...Currency) (u string) {
 	return
 }
 
+// RatesFinderCache implementa proxy para RatesFinders.
+// Realiza cache das consultas.
+type RatesFinderCache struct {
+	service RatesFinder
+	logger  logging.LoggerRates
+}
+
+// NewRatesFinderCache é responsável por instanciar RatesFinderCache
+func NewRatesFinderCache(s *RatesFinderService, l logging.LoggerRates) (c *RatesFinderCache) {
+	c = new(RatesFinderCache)
+	c.service = s
+	c.logger = l
+	return
+}
+
+// Find delega para outras implementações. Consulta Taxas de Câmbio para moedas
+func (cm *RatesFinderCache) Find(cs ...Currency) (rates map[string]*Rate, err error) {
+	rates, err = cm.service.Find(cs...)
+	return
+}
+
 // RatesFinderProxy implementa proxy para RatesFinders
 type RatesFinderProxy struct {
 	service RatesFinder
@@ -137,7 +158,7 @@ type RatesFinderProxy struct {
 }
 
 // NewRatesFinderProxy é responsável por instanciar RatesFinderProxy
-func NewRatesFinderProxy(s *RatesFinderService, l logging.LoggerRates) (c *RatesFinderProxy) {
+func NewRatesFinderProxy(s *RatesFinderCache, l logging.LoggerRates) (c *RatesFinderProxy) {
 	c = new(RatesFinderProxy)
 	c.service = s
 	c.logger = l

@@ -19,6 +19,7 @@ var PkgSet = wire.NewSet(
 	NewRatesFinderProxy,
 	// Define que a implementação Padão de RatesFinder é RatesFinderProxy
 	wire.Bind(new(RatesFinder), new(*RatesFinderProxy)),
+	NewRatesFinderCache,
 	NewRatesFinderService,
 )
 
