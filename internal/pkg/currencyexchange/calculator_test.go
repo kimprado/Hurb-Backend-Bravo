@@ -13,8 +13,11 @@ func TestCalculatorControllerExchangeAmount(t *testing.T) {
 
 	var err error
 
-	//TODO: Praparar Mock Objects dos Serviços
-	calculator, err := initializeCalculatorControllerTest(nil, nil)
+	currencyManager := &CurrencyManagerMock{func(currency string) (c *Currency, err error) {
+		return &Currency{currency}, nil
+	}}
+
+	calculator, err := initializeCalculatorControllerTest(currencyManager, nil)
 	if err != nil {
 		t.Errorf("Criação serviço %v\n", err)
 		return
@@ -47,4 +50,18 @@ func TestCalculatorControllerExchangeAmount(t *testing.T) {
 		})
 	}
 
+}
+
+type CurrencyManagerMock struct {
+	f func(currency string) (c *Currency, err error)
+}
+
+func (cm *CurrencyManagerMock) Find(currency string) (c *Currency, err error) {
+	return cm.f(currency)
+}
+func (cm *CurrencyManagerMock) Add(currency string) (err error) {
+	return
+}
+func (cm *CurrencyManagerMock) Remove(currency string) (err error) {
+	return
 }
