@@ -87,7 +87,7 @@ type CurrencyManagerMock struct {
 func (cm *CurrencyManagerMock) Find(currency string) (c *Currency, err error) {
 	return cm.f(currency)
 }
-func (cm *CurrencyManagerMock) Add(currency string) (err error) {
+func (cm *CurrencyManagerMock) Add(CurrencyDTO) (err error) {
 	return
 }
 func (cm *CurrencyManagerMock) Remove(currency string) (err error) {

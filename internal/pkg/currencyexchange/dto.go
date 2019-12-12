@@ -1,5 +1,10 @@
 package currencyexchange
 
+// CurrencyDTO representa moeda troca de informações da API
+type CurrencyDTO struct {
+	Code string `json:"code"`
+}
+
 // RatesDTO mapeia resposta da API de câmbio
 type RatesDTO struct {
 	Rates map[string]Quote `json:"rates"`

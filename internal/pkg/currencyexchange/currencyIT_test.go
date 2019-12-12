@@ -72,7 +72,7 @@ func TestAddSupportedCurrency(t *testing.T) {
 	}
 	assert.NotNil(t, currencyManager)
 
-	err = currencyManager.Add("BRL")
+	err = currencyManager.Add(CurrencyDTO{"BRL"})
 	if err != nil {
 		t.Errorf("Consulta Redis %v\n", err)
 		return

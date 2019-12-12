@@ -11,6 +11,8 @@ import (
 func statusCode(e error) (s int) {
 
 	switch v := e.(type) {
+	case *currencyexchange.CurrencyCreationError:
+		s = http.StatusBadRequest // 400
 	case *currencyexchange.LookupCurrencyError:
 		s = http.StatusServiceUnavailable // 503
 	case *currencyexchange.UnsupportedCurrencyError:
@@ -28,7 +30,8 @@ func statusCode(e error) (s int) {
 	default:
 		// TODO: Fazer com que este código não seja executado.
 		// Aplicar testes/verificações.
-		// Eventualmente substituir por log.err.
+		// Eventualmente substituir por log.err, caso não exista
+		// cobertura suficiente que garanta que não será executado.
 		panic(fmt.Sprintf("Tipo de erro não definido %T", v))
 	}
 	return

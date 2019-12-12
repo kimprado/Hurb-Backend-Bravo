@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -14,14 +15,16 @@ import (
 
 // Controller trata requisições http de paredão
 type Controller struct {
-	calculator currencyexchange.Calculator
-	logger     logging.LoggerAPIExchange
+	calculator    currencyexchange.Calculator
+	currencyAdder currencyexchange.CurrencyAdder
+	logger        logging.LoggerAPIExchange
 }
 
 // NewController é responsável por instanciar Controller
-func NewController(c currencyexchange.Calculator, l logging.LoggerAPIExchange) (r *Controller) {
+func NewController(c currencyexchange.Calculator, a currencyexchange.CurrencyAdder, l logging.LoggerAPIExchange) (r *Controller) {
 	r = new(Controller)
 	r.calculator = c
+	r.currencyAdder = a
 	r.logger = l
 	return
 }
@@ -112,6 +115,60 @@ func (v *Controller) Exchange(res http.ResponseWriter, req *http.Request, params
 		res,
 		http.StatusOK,
 		dto,
+		nil,
+	).WriteJSON()
+
+}
+
+// AddSupportedCurrency cria nova moeda suportada
+func (v *Controller) AddSupportedCurrency(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
+	var err error
+	var dto currencyexchange.CurrencyDTO
+
+	paramErr := errors.NewParametersError()
+
+	err = json.NewDecoder(req.Body).Decode(&dto)
+	if err != nil {
+		paramErr.Add(
+			errors.ParameterError{
+				Name:   "currency",
+				Reason: "'currency' em formato inválido. Não foi possível tratar parâmetro",
+			},
+		)
+	}
+
+	if paramErr.ContainsError() {
+		v.logger.Warnf("Erro na criação de moeda %q inválida: %v\n", paramErr)
+
+		web.NewHTTPResponse(
+			res,
+			statusCode(paramErr),
+			nil,
+			paramErr,
+		).WriteJSON()
+
+		return
+	}
+
+	err = v.currencyAdder.Add(dto)
+
+	if err != nil {
+		v.logger.Errorf("Erro ao criar moeda: %v\n", err)
+
+		web.NewHTTPResponse(
+			res,
+			statusCode(err),
+			nil,
+			err,
+		).WriteJSON()
+
+		return
+	}
+
+	web.NewHTTPResponse(
+		res,
+		http.StatusNoContent,
+		nil,
 		nil,
 	).WriteJSON()
 

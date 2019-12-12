@@ -50,6 +50,67 @@ func (e *UnsupportedCurrencyError) Error() string {
 	return e.ParametersError.Error()
 }
 
+// SupportedCurrencyCreationError representa erro na criação da moeda
+type SupportedCurrencyCreationError struct {
+	*errors.GenericError
+}
+
+// newSupportedCurrencyCreationError cria instância de SupportedCurrencyCreationError
+func newSupportedCurrencyCreationError() (e *SupportedCurrencyCreationError) {
+	e = new(SupportedCurrencyCreationError)
+	e.GenericError = errors.NewGenericError(
+		"Falha na criação da moeda",
+		fmt.Sprintf("Moeda não pôde ser criada"),
+	)
+	return
+}
+
+func (e *SupportedCurrencyCreationError) Error() string {
+	return e.GenericError.Error()
+}
+
+// CurrencyCreationError representa erro na criação da moeda
+type CurrencyCreationError struct {
+	*errors.ParametersError
+}
+
+// newCurrencyCreationError cria instância de CurrencyCreationError
+func newCurrencyCreationError() (e *CurrencyCreationError) {
+	e = new(CurrencyCreationError)
+	e.ParametersError = errors.NewParametersError()
+	e.ParametersError.Title = "Falha em Um ou Mais parâmetros ao criar Moeda"
+	return
+}
+
+// Add inclui erro de validação
+func (e *CurrencyCreationError) Add(param, value, reason string) {
+	e.ParametersError.Add(
+		errors.ParameterError{
+			Name:   param,
+			Value:  value,
+			Reason: reason,
+		},
+	)
+	return
+}
+
+func (e *CurrencyCreationError) Error() string {
+	return e.ParametersError.Error()
+}
+
+// Is informa se target == e. Verifica se e é do tipo
+// CurrencyCreationError, DomainError.
+func (e *CurrencyCreationError) Is(target error) bool {
+	switch target.(type) {
+	case *CurrencyCreationError:
+		return true
+	case *errors.DomainError:
+		return true
+	default:
+		return false
+	}
+}
+
 // CurrencyRateQuoteNotFoundError representa erro de cotação não encontrada para moeda
 type CurrencyRateQuoteNotFoundError struct {
 	*errors.ParametersError

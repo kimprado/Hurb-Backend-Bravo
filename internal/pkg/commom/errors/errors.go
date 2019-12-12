@@ -18,7 +18,7 @@ func (e *Wrap) Unwrap() error {
 // GenericError representa informações sobre erro
 type GenericError struct {
 	Title  string `json:"title"`
-	Detail string `json:"detail"`
+	Detail string `json:"detail,omitempty"`
 }
 
 // NewGenericError cria instância de GenericError
@@ -53,7 +53,7 @@ func (e *DomainError) Error() string {
 // ParametersError representa informações sobre erro de parâmetros
 type ParametersError struct {
 	Title             string           `json:"title"`
-	InvalidParameters []ParameterError `json:"invalid-parameters"`
+	InvalidParameters []ParameterError `json:"invalid-parameters,omitempty"`
 }
 
 // NewParametersError cria instância de ParametersError
@@ -80,9 +80,9 @@ func (e *ParametersError) ContainsError() bool {
 
 // ParameterError representa informações sobre erro de parâmetros
 type ParameterError struct {
-	Name   string `json:"name"`
-	Value  string `json:"value"`
-	Reason string `json:"reason"`
+	Name   string `json:"name,omitempty"`
+	Value  string `json:"value,omitempty"`
+	Reason string `json:"reason,omitempty"`
 }
 
 // GetDomainErrorOr retorna fromErr caso seja do tipo DomainError,

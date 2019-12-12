@@ -28,9 +28,34 @@ func newCurrency(code string) (c *Currency) {
 	return
 }
 
+func newCurrencyFromDTO(dto CurrencyDTO) (c *Currency) {
+	c = new(Currency)
+	c.code = dto.Code
+	return
+}
+
 // Code retorna valor de code
 func (c Currency) Code() (cd string) {
 	cd = c.code
+	return
+}
+
+// Valid retorna erros que invalidam criação da moeda
+// Retorna err == nil caso não exista inconsistência
+func (c Currency) Valid() (err error) {
+
+	paramErr := newCurrencyCreationError()
+	if len(c.code) != 3 {
+		paramErr.Add(
+			"code",
+			c.code,
+			fmt.Sprintf("Código da moeda %q inválido. Código deve ter 3 caracteres", c.code),
+		)
+	}
+	if paramErr.ContainsError() {
+		err = paramErr
+	}
+
 	return
 }
 
@@ -55,8 +80,8 @@ func (cm *CurrencyManagerProxy) Find(currency string) (c *Currency, err error) {
 }
 
 // Add delega para outras implementações. Adiciona moeda
-func (cm *CurrencyManagerProxy) Add(currency string) (err error) {
-	err = cm.db.Add(currency)
+func (cm *CurrencyManagerProxy) Add(dto CurrencyDTO) (err error) {
+	err = cm.db.Add(dto)
 	return
 }
 
@@ -106,8 +131,18 @@ func (cm *CurrencyManagerDB) Find(currency string) (c *Currency, err error) {
 }
 
 // Add delega para outras implementações. Adiciona moeda
-func (cm *CurrencyManagerDB) Add(currency string) (err error) {
+func (cm *CurrencyManagerDB) Add(dto CurrencyDTO) (err error) {
 
+	c := newCurrencyFromDTO(dto)
+	err = c.Valid()
+	if err != nil {
+		return
+	}
+
+	var currency string
+	currency = c.Code()
+
+	//TODO: Criar repositório para retirar código de infraestrutura da camada de serviço
 	con := cm.redisClient.Get()
 	defer con.Close()
 
