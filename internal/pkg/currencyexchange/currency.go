@@ -2,11 +2,14 @@ package currencyexchange
 
 import (
 	"fmt"
+	"regexp"
 
 	"github.com/rep/exchange/internal/pkg/commom/config"
 	"github.com/rep/exchange/internal/pkg/commom/logging"
 	"github.com/rep/exchange/internal/pkg/infra/redis"
 )
+
+var rgUpperCase = regexp.MustCompile(`^[A-Z]{1,}$`)
 
 // CurrencyManager gerencia moedas disponíveis para cálculo.
 type CurrencyManager interface {
@@ -49,7 +52,14 @@ func (c Currency) Valid() (err error) {
 		paramErr.Add(
 			"code",
 			c.code,
-			fmt.Sprintf("Código da moeda %q inválido. Código deve ter 3 caracteres", c.code),
+			fmt.Sprintf("Código da moeda %q inválido. Código deve ter 3 caracteres. Ex: USD", c.code),
+		)
+	}
+	if !rgUpperCase.MatchString(c.code) {
+		paramErr.Add(
+			"code",
+			c.code,
+			fmt.Sprintf("Código da moeda %q inválido. Código deve ter apenas letras maiúsculas. Ex: USD", c.code),
 		)
 	}
 	if paramErr.ContainsError() {

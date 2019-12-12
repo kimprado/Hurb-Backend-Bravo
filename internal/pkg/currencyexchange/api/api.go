@@ -138,7 +138,7 @@ func (v *Controller) AddSupportedCurrency(res http.ResponseWriter, req *http.Req
 	}
 
 	if paramErr.ContainsError() {
-		v.logger.Warnf("Erro na criação de moeda %q inválida: %v\n", paramErr)
+		v.logger.Warnf("Erro na criação de moeda: %v\n", paramErr)
 
 		web.NewHTTPResponse(
 			res,
