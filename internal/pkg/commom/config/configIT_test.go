@@ -25,6 +25,15 @@ const configTemplate = `
         "host": "host-IT-test",
         "port": 6379
 	},
+    "currencymanager": {
+        "SUPPORTEDCURRENCIES": [
+            "USD"
+            ,"BRL"
+            ,"EUR"
+            ,"BTC"
+            ,"ETH"
+        ]
+    },
     "ratesfinder": {
         "basecurrency": "USD",
         "entrytimeout": 60
@@ -49,20 +58,22 @@ func TestLoadConfig(t *testing.T) {
 	writeFile(f, fmt.Sprintf(configTemplate, dateTime))
 
 	expect := struct {
-		environment  string
-		serverPort   string
-		redisDbHost  string
-		redisDbPort  int
-		basecurrency string
-		entrytimeout time.Duration
-		logging      map[string]string
+		environment       string
+		serverPort        string
+		redisDbHost       string
+		redisDbPort       int
+		basecurrency      string
+		defaultcurrencies []string
+		entrytimeout      time.Duration
+		logging           map[string]string
 	}{
-		environment:  "test-" + dateTime,
-		serverPort:   "3080",
-		redisDbHost:  "host-IT-test",
-		redisDbPort:  6379,
-		basecurrency: "USD",
-		entrytimeout: 60,
+		environment:       "test-" + dateTime,
+		serverPort:        "3080",
+		redisDbHost:       "host-IT-test",
+		redisDbPort:       6379,
+		basecurrency:      "USD",
+		defaultcurrencies: []string{"USD", "BRL", "EUR", "BTC", "ETH"},
+		entrytimeout:      60,
 		logging: map[string]string{
 			"ROOT": "INFO",
 		},
@@ -91,6 +102,9 @@ func TestLoadConfig(t *testing.T) {
 	}
 	if expect.basecurrency != c.RatesFinder.BaseCurrency {
 		t.Errorf("basecurrency esperado %q é diferente de %q\n", expect.basecurrency, c.RatesFinder.BaseCurrency)
+	}
+	if fmt.Sprintf("%v", expect.defaultcurrencies) != fmt.Sprintf("%v", c.CurrencyManager.SupportedCurrencies) {
+		t.Errorf("defaultcurrencies esperado %q é diferente de %q\n", expect.defaultcurrencies, c.CurrencyManager.SupportedCurrencies)
 	}
 	if expect.entrytimeout != c.RatesFinder.EntryTimeout {
 		t.Errorf("entrytimeout esperado %q é diferente de %q\n", expect.entrytimeout, c.RatesFinder.EntryTimeout)

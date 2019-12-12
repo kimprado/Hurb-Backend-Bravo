@@ -9,6 +9,15 @@
         "host": "redis-test",
         "port": 6379
     },
+    "currencymanager": {
+        "SUPPORTEDCURRENCIES": [
+            "USD"
+            ,"BRL"
+            ,"EUR"
+            ,"BTC"
+            ,"ETH"
+        ]
+    },
     "ratesfinder": {
         "basecurrency": "USD",
         "entrytimeout": 60

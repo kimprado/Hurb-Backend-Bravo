@@ -9,6 +9,15 @@
         "host": "localhost",
         "port": 6380
     },
+    "currencymanager": {
+        "SUPPORTEDCURRENCIES": [
+            "USD"
+            ,"BRL"
+            ,"EUR"
+            ,"BTC"
+            ,"ETH"
+        ]
+    },
     "ratesfinder": {
         "basecurrency": "USD",
         "entrytimeout": 60

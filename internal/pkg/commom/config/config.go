@@ -29,7 +29,7 @@ type Configuration struct {
 	}
 
 	CurrencyManager struct {
-		SupportedCurrencies []string `default:"[USD,BRL,EUR,BTC,ETH]"`
+		SupportedCurrencies []string `required:"true"`
 	}
 
 	RatesFinder struct {
