@@ -149,7 +149,7 @@ func newLookupRatesQuoteError() (e *LookupRatesQuoteError) {
 	e = new(LookupRatesQuoteError)
 	e.GenericError = errors.NewGenericError(
 		"Falha na consulta de Taxas de Câmbio",
-		fmt.Sprintf("Não foi possível consultar Taxas de Câmbio"),
+		fmt.Sprintf("Não foi possível obter Taxas de Câmbio"),
 	)
 	return
 }

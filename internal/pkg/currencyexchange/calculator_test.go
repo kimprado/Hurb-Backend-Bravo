@@ -3,12 +3,13 @@
 package currencyexchange
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCalculatorControllerExchangeAmount(t *testing.T) {
+func TestExchangeAmount(t *testing.T) {
 	t.Parallel()
 
 	var err error
@@ -17,7 +18,26 @@ func TestCalculatorControllerExchangeAmount(t *testing.T) {
 		return &Currency{currency}, nil
 	}}
 
-	calculator, err := initializeCalculatorControllerTest(currencyManager, nil)
+	ratesFinder := &RatesFinderMock{func(currencies ...Currency) (rates map[string]*Rate, err error) {
+		rates = make(map[string]*Rate)
+		for _, c := range currencies {
+			var quote Quote
+			switch c.Code() {
+			case "BRL":
+				quote = Quote(4.2179556517)
+				break
+			case "EUR":
+				quote = Quote(0.9013881377)
+				break
+			default:
+				return nil, errors.New("Moeda não configurada no teste")
+			}
+			rates[c.Code()] = &Rate{c, quote}
+		}
+		return
+	}}
+
+	calculator, err := initializeCalculatorControllerTest(currencyManager, ratesFinder)
 	if err != nil {
 		t.Errorf("Criação serviço %v\n", err)
 		return
@@ -30,7 +50,7 @@ func TestCalculatorControllerExchangeAmount(t *testing.T) {
 		curTo   string
 		amount  float64
 	}{
-		{5, "BRL", "EUR", 1.068513057},
+		{1.068513057192417, "BRL", "EUR", 5},
 	}
 
 	for _, tc := range testCases {
@@ -38,15 +58,12 @@ func TestCalculatorControllerExchangeAmount(t *testing.T) {
 			t.Parallel()
 
 			result, err := calculator.Exchange(tc.curFrom, tc.curTo, tc.amount)
-
 			if err != nil {
-				t.Errorf("Erro inesperado ao realizar Exchange de %#v - %v", tc, err)
+				t.Errorf("Erro inesperado ao realizar Exchange do TestCase %+v: %v", tc, err)
 				return
 			}
-
 			assert.NotNil(t, result)
-			assert.Equal(t, tc.expect, result)
-
+			assert.Equal(t, tc.expect, result.value)
 		})
 	}
 
@@ -64,4 +81,12 @@ func (cm *CurrencyManagerMock) Add(currency string) (err error) {
 }
 func (cm *CurrencyManagerMock) Remove(currency string) (err error) {
 	return
+}
+
+type RatesFinderMock struct {
+	f func(currencies ...Currency) (rates map[string]*Rate, err error)
+}
+
+func (rf *RatesFinderMock) Find(currencies ...Currency) (rates map[string]*Rate, err error) {
+	return rf.f(currencies...)
 }
