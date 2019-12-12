@@ -42,7 +42,7 @@ func initializeCurrencyManagerDBTest(config2 config.Configuration) (*CurrencyMan
 		return nil, err
 	}
 	loggerCurrency := logging.NewCurrency(loggingLevels)
-	currencyManagerDB := NewCurrencyManagerDB(dbConnection, redisDB, loggerCurrency)
+	currencyManagerDB := NewCurrencyManagerDB(dbConnection, redisDB, config2, loggerCurrency)
 	return currencyManagerDB, nil
 }
 

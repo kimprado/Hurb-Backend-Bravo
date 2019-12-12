@@ -56,13 +56,13 @@ func (cm *CurrencyManagerProxy) Find(currency string) (c *Currency, err error) {
 
 // Add delega para outras implementações. Adiciona moeda
 func (cm *CurrencyManagerProxy) Add(currency string) (err error) {
-
+	err = cm.db.Add(currency)
 	return
 }
 
 // Remove delega para outras implementações. Remove moeda
 func (cm *CurrencyManagerProxy) Remove(currency string) (err error) {
-
+	err = cm.db.Remove(currency)
 	return
 }
 
@@ -70,14 +70,16 @@ func (cm *CurrencyManagerProxy) Remove(currency string) (err error) {
 type CurrencyManagerDB struct {
 	redisClient redis.DBConnection
 	redisCfg    config.RedisDB
+	cfg         config.Configuration
 	logger      logging.LoggerCurrency
 }
 
 // NewCurrencyManagerDB é responsável por instanciar Controller
-func NewCurrencyManagerDB(r redis.DBConnection, cr config.RedisDB, l logging.LoggerCurrency) (c *CurrencyManagerDB) {
+func NewCurrencyManagerDB(r redis.DBConnection, cr config.RedisDB, cfg config.Configuration, l logging.LoggerCurrency) (c *CurrencyManagerDB) {
 	c = new(CurrencyManagerDB)
 	c.redisClient = r
 	c.redisCfg = cr
+	c.cfg = cfg
 	c.logger = l
 	return
 }
@@ -128,6 +130,61 @@ func (cm *CurrencyManagerDB) Remove(currency string) (err error) {
 
 	if err != nil {
 		return
+	}
+
+	return
+}
+
+// LoadDefaultSupportedCurrencies carrega moedas suportadas por padrão.
+// Realiza carga apenas 1 vez.
+func (cm *CurrencyManagerDB) LoadDefaultSupportedCurrencies() (err error) {
+
+	con := cm.redisClient.Get()
+	defer con.Close()
+
+	var loaded bool
+
+	loaded, err = cm.verifyLoaded()
+	if err != nil {
+		return
+	}
+	if loaded {
+		return
+	}
+
+	err = con.Send("MULTI")
+	if err != nil {
+		return
+	}
+
+	con.Send("SET", fmt.Sprintf("%s:config:currency:loaded", cm.redisCfg.Prefix), 1)
+	for _, c := range cm.cfg.CurrencyManager.SupportedCurrencies {
+		con.Send("SADD", fmt.Sprintf("%s:currency:supported", cm.redisCfg.Prefix), c)
+	}
+
+	_, err = con.Do("EXEC")
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (cm *CurrencyManagerDB) verifyLoaded() (loaded bool, err error) {
+	const found = 1
+
+	con := cm.redisClient.Get()
+	defer con.Close()
+
+	var reply interface{}
+	reply, err = con.Do("EXISTS", fmt.Sprintf("%s:config:currency:loaded", cm.redisCfg.Prefix))
+
+	if err != nil {
+		return
+	}
+
+	if reply.(int64) == found {
+		loaded = true
 	}
 
 	return

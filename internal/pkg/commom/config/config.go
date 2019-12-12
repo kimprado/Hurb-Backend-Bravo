@@ -28,6 +28,10 @@ type Configuration struct {
 		Level LoggingLevels
 	}
 
+	CurrencyManager struct {
+		SupportedCurrencies []string `default:"[USD,BRL,EUR,BTC,ETH]"`
+	}
+
 	RatesFinder struct {
 		BaseCurrency string        `required:"true"`
 		EntryTimeout time.Duration `required:"true"`

@@ -47,7 +47,7 @@ func initializeApp(path string) (*app.ExchangeApp, error) {
 		return nil, err
 	}
 	loggerCurrency := logging.NewCurrency(loggingLevels)
-	currencyManagerDB := currencyexchange.NewCurrencyManagerDB(dbConnection, redisDB, loggerCurrency)
+	currencyManagerDB := currencyexchange.NewCurrencyManagerDB(dbConnection, redisDB, configuration, loggerCurrency)
 	currencyManagerProxy := currencyexchange.NewCurrencyManagerProxy(currencyManagerDB, loggerCurrency)
 	loggerRates := logging.NewRates(loggingLevels)
 	ratesFinderService := currencyexchange.NewRatesFinderService(configuration, loggerRates)
@@ -63,6 +63,6 @@ func initializeApp(path string) (*app.ExchangeApp, error) {
 	paramWebServer := webserver.NewParamWebServer(controller, configuration, loggerWebServer)
 	webServer := webserver.NewWebServer(paramWebServer)
 	logger := logging.NewLogger(loggingLevels)
-	exchangeApp := app.NewExchangeApp(webServer, logger)
+	exchangeApp := app.NewExchangeApp(currencyManagerDB, webServer, logger)
 	return exchangeApp, nil
 }
