@@ -29,6 +29,12 @@ func TestExchangeAmount(t *testing.T) {
 			case "EUR":
 				quote = Quote(0.9013881377)
 				break
+			case "CAD":
+				quote = Quote(1.3237923251)
+				break
+			case "USD":
+				quote = Quote(1)
+				break
 			default:
 				return nil, errors.New("Moeda não configurada no teste")
 			}
@@ -51,6 +57,11 @@ func TestExchangeAmount(t *testing.T) {
 		amount  float64
 	}{
 		{1.068513057192417, "BRL", "EUR", 5},
+		{1.5692345230875773, "BRL", "CAD", 5},
+		{1.1854083856914917, "BRL", "USD", 5},
+		{46.79400000162659, "EUR", "BRL", 10},
+		{31.862668877320868, "CAD", "BRL", 10},
+		{42.179556516999995, "USD", "BRL", 10},
 	}
 
 	for _, tc := range testCases {
