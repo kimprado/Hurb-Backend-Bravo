@@ -50,14 +50,15 @@ func (e *UnsupportedCurrencyError) Error() string {
 	return e.ParametersError.Error()
 }
 
-// SupportedCurrencyCreationError representa erro na criação da moeda
-type SupportedCurrencyCreationError struct {
+// CurrencyCreationError representa erro na criação da moeda.
+// Erro genérico.
+type CurrencyCreationError struct {
 	*errors.GenericError
 }
 
-// newSupportedCurrencyCreationError cria instância de SupportedCurrencyCreationError
-func newSupportedCurrencyCreationError() (e *SupportedCurrencyCreationError) {
-	e = new(SupportedCurrencyCreationError)
+// newCurrencyCreationError cria instância de CurrencyCreationError
+func newCurrencyCreationError() (e *CurrencyCreationError) {
+	e = new(CurrencyCreationError)
 	e.GenericError = errors.NewGenericError(
 		"Falha na criação da moeda",
 		fmt.Sprintf("Moeda não pôde ser criada"),
@@ -65,25 +66,26 @@ func newSupportedCurrencyCreationError() (e *SupportedCurrencyCreationError) {
 	return
 }
 
-func (e *SupportedCurrencyCreationError) Error() string {
+func (e *CurrencyCreationError) Error() string {
 	return e.GenericError.Error()
 }
 
-// CurrencyCreationError representa erro na criação da moeda
-type CurrencyCreationError struct {
+// CurrencyCreationParametersError representa erro na criação da moeda
+type CurrencyCreationParametersError struct {
 	*errors.ParametersError
 }
 
-// newCurrencyCreationError cria instância de CurrencyCreationError
-func newCurrencyCreationError() (e *CurrencyCreationError) {
-	e = new(CurrencyCreationError)
+// newCurrencyCreationParametersError cria instância de CurrencyCreationParametersError
+func newCurrencyCreationParametersError() (e *CurrencyCreationParametersError) {
+	e = new(CurrencyCreationParametersError)
 	e.ParametersError = errors.NewParametersError()
-	e.ParametersError.Title = "Falha em Um ou Mais parâmetros ao criar Moeda"
+	e.ParametersError.Title = "Falha na criação da moeda"
+	e.ParametersError.Detail = "Falha em Um ou Mais parâmetros ao criar Moeda"
 	return
 }
 
 // Add inclui erro de validação
-func (e *CurrencyCreationError) Add(param, value, reason string) {
+func (e *CurrencyCreationParametersError) Add(param, value, reason string) {
 	e.ParametersError.Add(
 		errors.ParameterError{
 			Name:   param,
@@ -94,15 +96,15 @@ func (e *CurrencyCreationError) Add(param, value, reason string) {
 	return
 }
 
-func (e *CurrencyCreationError) Error() string {
+func (e *CurrencyCreationParametersError) Error() string {
 	return e.ParametersError.Error()
 }
 
 // Is informa se target == e. Verifica se e é do tipo
-// CurrencyCreationError, DomainError.
-func (e *CurrencyCreationError) Is(target error) bool {
+// CurrencyCreationParametersError, DomainError.
+func (e *CurrencyCreationParametersError) Is(target error) bool {
 	switch target.(type) {
-	case *CurrencyCreationError:
+	case *CurrencyCreationParametersError:
 		return true
 	case *errors.DomainError:
 		return true
@@ -143,7 +145,8 @@ func (e *RemoveCurrencyNotFoundError) Is(target error) bool {
 	}
 }
 
-// RemoveCurrencyError representa erro na remoção da moeda
+// RemoveCurrencyError representa erro na remoção da moeda.
+// Erro genérico.
 type RemoveCurrencyError struct {
 	*errors.GenericError
 }

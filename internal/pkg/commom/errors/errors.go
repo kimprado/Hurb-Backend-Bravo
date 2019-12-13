@@ -53,6 +53,7 @@ func (e *DomainError) Error() string {
 // ParametersError representa informações sobre erro de parâmetros
 type ParametersError struct {
 	Title             string           `json:"title"`
+	Detail            string           `json:"detail,omitempty"`
 	InvalidParameters []ParameterError `json:"invalid-parameters,omitempty"`
 }
 

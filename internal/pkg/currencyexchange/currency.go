@@ -47,7 +47,7 @@ func (c Currency) Code() (cd string) {
 // Retorna err == nil caso não exista inconsistência
 func (c Currency) Valid() (err error) {
 
-	paramErr := newCurrencyCreationError()
+	paramErr := newCurrencyCreationParametersError()
 	if len(c.code) != 3 {
 		paramErr.Add(
 			"code",

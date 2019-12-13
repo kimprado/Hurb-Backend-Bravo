@@ -93,7 +93,7 @@ func (c *CalculatorController) Exchange(from, to string, amount float64) (ex *Ex
 func (c *CalculatorController) Add(dto CurrencyDTO) (err error) {
 	err = c.cm.Add(dto)
 	if err != nil {
-		err = errors.GetDomainErrorOr(err, newSupportedCurrencyCreationError())
+		err = errors.GetDomainErrorOr(err, newCurrencyCreationError())
 	}
 	return
 }
