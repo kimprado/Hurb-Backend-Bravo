@@ -1,0 +1,320 @@
+{
+	"info": {
+		"_postman_id": "ad77d83d-16ad-4069-a2e6-758f026f5621",
+		"name": "ExchangeRates",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "PerformExchange-BRL-EUR-5",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"code\": \"BRL\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/exchange?from=BRL&to=EUR&amount=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"exchange"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "BRL"
+						},
+						{
+							"key": "to",
+							"value": "EUR"
+						},
+						{
+							"key": "amount",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PerformExchange-BRL-EUR-12345",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"code\": \"BRL\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/exchange?from=BRL&to=EUR&amount=123.45",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"exchange"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "BRL"
+						},
+						{
+							"key": "to",
+							"value": "EUR"
+						},
+						{
+							"key": "amount",
+							"value": "123.45"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PerformIExchangeInvalid-AAA-EUR-5",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"code\": \"BRL\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/exchange?from=AAA&to=EUR&amount=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"exchange"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "AAA"
+						},
+						{
+							"key": "to",
+							"value": "EUR"
+						},
+						{
+							"key": "amount",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddValidBRLCurrency",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/currencies/BRL",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"currencies",
+						"BRL"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddValidEURCurrency",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/currencies/EUR",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"currencies",
+						"EUR"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddValidAAACurrency",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/currencies/AAA",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"currencies",
+						"AAA"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddInvalidShortSizeCurrency",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/currencies/AB",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"currencies",
+						"AB"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddInvalidLargeSizeCurrency",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/currencies/ABCD",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"currencies",
+						"ABCD"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddInvalidNumberCurrency",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/currencies/AB7",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"currencies",
+						"AB7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AddInvalidNumberAndSizeCurrency",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/currencies/ABC4",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"currencies",
+						"ABC4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RemoveBRLCurrency",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/currencies/BRL",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"currencies",
+						"BRL"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RemoveEURCurrency",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/currencies/EUR",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"currencies",
+						"EUR"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RemoveAAACurrency",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/currencies/AAA",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"currencies",
+						"AAA"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
