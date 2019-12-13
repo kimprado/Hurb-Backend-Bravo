@@ -1,0 +1,161 @@
+swagger: "2.0"
+info:
+  description: "API de Câmbio Monetário"
+  version: "1.0.0"
+  title: "Swagger Exchange"
+basePath: "/api"
+tags:
+- name: "Exchange"
+  description: "Permite realizar Câmbio Monetário"
+- name: "Currency"
+  description: "Permite realizar operações sobre moedas disponíveis"
+schemes:
+- "http"
+- "https"
+produces:
+  - application/json
+paths:
+  /exchange:
+    get:
+      tags:
+      - "Exchange"
+      summary: "Realiza câmbio monetário"
+      description: "Realiza câmbio monetário com cotações atualizadas obtidas de serviço online"
+      parameters:
+      - name: "from"
+        in: "query"
+        required: true
+        type: string
+        x-example: BRL
+      - name: "to"
+        in: "query"
+        required: true
+        type: string
+        x-example: EUR
+      - name: "amount"
+        in: "query"
+        required: true
+        type: number
+        format: "float"
+        x-example: 5
+      responses:
+        200:
+          description: "sucesso"
+          schema:
+            $ref: "#/definitions/ExchangeValue"
+        400:
+          $ref: "#/responses/BadRequest"
+        500:
+          $ref: "#/responses/UnexpectedError"
+        503:
+          description: "Serviço temporariamente indisponível"
+          schema:
+            $ref: "#/definitions/ExchangeValue"
+  /currencies/{currency}:
+    put:
+      tags:
+      - "Currency"
+      summary: "Cria moeda"
+      description: "Cria moeda com código informado"
+      parameters:
+      - name: "currency"
+        in: "path"
+        required: true
+        type: string
+        x-example: "BRL"
+      responses:
+        204:
+          description: "Moeda criada com sucesso"
+        400:
+          description: "Falha em Um ou Mais parâmetros ao criar Moeda"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          $ref: "#/responses/UnexpectedError"
+    delete:
+      tags:
+      - "Currency"
+      summary: "Remove moeda"
+      description: "Remove moeda com código informado"
+      parameters:
+      - name: "currency"
+        in: "path"
+        required: true
+        type: string
+        x-example: "BRL"
+      responses:
+        204:
+          description: "Moeda removida com sucesso"
+        404:
+          description: "Moeda inexistente"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          $ref: "#/responses/UnexpectedError"
+responses:
+  BadRequest:
+    description: "Erro com parâmetros informados"
+    schema:
+      $ref: "#/definitions/ParametersError"
+  UnexpectedError:
+    description: "Erro inesperado"
+    schema:
+      $ref: "#/definitions/Error"
+definitions:
+  ExchangeValue:
+    type: object
+    description: "Representa valor monetário convertido para outra moeda"
+    properties:
+      value:
+        type: number
+        format: "float"
+        example: 1.0919891675143008
+    xml:
+      name: "ExchangeValue"
+  Error:
+    type: object
+    required:
+      - title
+    properties:
+      title:
+        type: string
+      detail:
+        type: string
+      instance:
+        type: string
+    xml:
+      name: "Error"
+  ParametersError:
+    type: object
+    description: "representa informações sobre erro de parâmetros"
+    required:
+      - title
+    properties:
+      title:
+        type: string
+      detail:
+        type: string
+      instance:
+        type: string
+      invalid-parameters:
+        type: "array"
+        xml:
+          name: "invalid-parameters"
+          wrapped: true
+        items:
+          $ref: "#/definitions/ParameterError"
+    xml:
+      name: "ParametersError"
+  ParameterError:
+    type: "object"
+    description: "representa informações sobre erro de parâmetro"
+    properties:
+      name:
+        type: string
+        format: "int64"
+      value:
+        type: string
+      reason:
+        type: string
+    xml:
+      name: "ParameterError"
