@@ -1,4 +1,4 @@
-Cotações https://api.exchangeratesapi.io/latest?base=USD&symbols=USD,EUR,BRL
+Cotações https://api.exchangeratesapi.io/latest?base=USD&symbols=CAD,USD,EUR,BRL
 
 {
     "rates": {
