@@ -72,10 +72,11 @@ func (rf *RatesFinderService) Find(cs ...Currency) (rates map[string]*Rate, err 
 	rates = make(map[string]*Rate)
 
 	var dto RatesDTO
-	err = sendRequest(urlQuery(rf.baseCurrency, cs...), &dto)
+	url := urlQuery(rf.baseCurrency, cs...)
+	err = sendRequest(url, &dto)
 
 	if err == errHTTPStatusBadRequest {
-		pmError := newRateQuoteServiceParametersError()
+		pmError := newRateQuoteExternalServiceParametersError(url)
 		pmError.Add((string)(rf.baseCurrency))
 		for _, c := range cs {
 			pmError.Add(c.Code())

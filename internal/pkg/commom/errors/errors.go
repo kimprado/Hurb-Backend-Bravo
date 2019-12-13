@@ -54,6 +54,7 @@ func (e *DomainError) Error() string {
 type ParametersError struct {
 	Title             string           `json:"title"`
 	Detail            string           `json:"detail,omitempty"`
+	Instance          string           `json:"instance,omitempty"`
 	InvalidParameters []ParameterError `json:"invalid-parameters,omitempty"`
 }
 
@@ -66,7 +67,12 @@ func NewParametersError() (e *ParametersError) {
 }
 
 func (e *ParametersError) Error() string {
-	return fmt.Sprintf("%s %v", e.Title, e.InvalidParameters)
+	var instance string
+	if e.Instance != "" {
+		instance = fmt.Sprintf("(%v)", e.Instance)
+	}
+
+	return fmt.Sprintf("%s %v %v", e.Title, e.InvalidParameters, instance)
 }
 
 // Add adiciona novo ParameterError

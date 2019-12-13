@@ -174,7 +174,8 @@ type CurrencyRateQuoteNotFoundError struct {
 func newCurrencyRateQuoteNotFoundError() (e *CurrencyRateQuoteNotFoundError) {
 	e = new(CurrencyRateQuoteNotFoundError)
 	e.ParametersError = errors.NewParametersError()
-	e.ParametersError.Title = "Falha na consulta de Uma ou Mais Cotações"
+	e.ParametersError.Title = "Falha na consulta de cotações"
+	e.ParametersError.Detail = "Falha na consulta de Uma ou Mais Cotações"
 	return
 }
 
@@ -193,7 +194,8 @@ func (e *CurrencyRateQuoteNotFoundError) Error() string {
 	return e.ParametersError.Error()
 }
 
-// RateQuoteNotFoundError representa erro de cotação não retornada pela consulta
+// RateQuoteNotFoundError representa erro de cotação não retornada pela consulta.
+// Erro genérico.
 type RateQuoteNotFoundError struct {
 	*errors.GenericError
 }
@@ -203,7 +205,7 @@ func newRateQuoteNotFoundError() (e *RateQuoteNotFoundError) {
 	e = new(RateQuoteNotFoundError)
 	e.GenericError = errors.NewGenericError(
 		"Falha na consulta de cotações",
-		fmt.Sprintf("Uma ou Mais contações não puderam ser recuperadas"),
+		"",
 	)
 	return
 }
@@ -212,22 +214,24 @@ func (e *RateQuoteNotFoundError) Error() string {
 	return e.GenericError.Error()
 }
 
-// RateQuoteServiceParametersError representa erro de parâmetros na consulta
-// ao serviço de cotação
-type RateQuoteServiceParametersError struct {
+// RateQuoteExternalServiceParametersError representa erro de parâmetros na consulta
+// ao serviço externo de cotação
+type RateQuoteExternalServiceParametersError struct {
 	*errors.ParametersError
 }
 
-// newRateQuoteServiceParametersError cria instância de RateQuoteServiceParametersError
-func newRateQuoteServiceParametersError() (e *RateQuoteServiceParametersError) {
-	e = new(RateQuoteServiceParametersError)
+// newRateQuoteExternalServiceParametersError cria instância de RateQuoteExternalServiceParametersError
+func newRateQuoteExternalServiceParametersError(url string) (e *RateQuoteExternalServiceParametersError) {
+	e = new(RateQuoteExternalServiceParametersError)
 	e.ParametersError = errors.NewParametersError()
-	e.ParametersError.Title = "Um ou Mais parâmetros não são válidos no Serviço Externo de Cotações"
+	e.ParametersError.Title = "Falha na consulta de cotações"
+	e.ParametersError.Detail = "Um ou Mais parâmetros não são válidos no Serviço Externo de Cotações"
+	e.ParametersError.Instance = url
 	return
 }
 
 // Add inclui erro de cotacação
-func (e *RateQuoteServiceParametersError) Add(currency string) {
+func (e *RateQuoteExternalServiceParametersError) Add(currency string) {
 	e.ParametersError.Add(
 		errors.ParameterError{
 			Name:   "",
@@ -237,15 +241,15 @@ func (e *RateQuoteServiceParametersError) Add(currency string) {
 	)
 }
 
-func (e *RateQuoteServiceParametersError) Error() string {
+func (e *RateQuoteExternalServiceParametersError) Error() string {
 	return e.ParametersError.Error()
 }
 
 // Is informa se target == e. Verifica se e é do tipo
-// RateQuoteServiceParametersError, DomainError.
-func (e *RateQuoteServiceParametersError) Is(target error) bool {
+// RateQuoteExternalServiceParametersError, DomainError.
+func (e *RateQuoteExternalServiceParametersError) Is(target error) bool {
 	switch target.(type) {
-	case *RateQuoteServiceParametersError:
+	case *RateQuoteExternalServiceParametersError:
 		return true
 	case *errors.DomainError:
 		return true

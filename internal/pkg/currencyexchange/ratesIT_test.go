@@ -38,10 +38,10 @@ func TestFindRatesQuote(t *testing.T) {
 		{"EUR", "USD", nil},
 		{"USD", "BRL", nil},
 		{"USD", "EUR", nil},
-		{"", "BRL", &RateQuoteServiceParametersError{}},
-		{"BRL", "", &RateQuoteServiceParametersError{}},
-		{"BRLs", "EUR", &RateQuoteServiceParametersError{}},
-		{"EUR", "BRLs", &RateQuoteServiceParametersError{}},
+		{"", "BRL", &RateQuoteExternalServiceParametersError{}},
+		{"BRL", "", &RateQuoteExternalServiceParametersError{}},
+		{"BRLs", "EUR", &RateQuoteExternalServiceParametersError{}},
+		{"EUR", "BRLs", &RateQuoteExternalServiceParametersError{}},
 	}
 	for _, tc := range testCases {
 		t.Run("", func(t *testing.T) {
