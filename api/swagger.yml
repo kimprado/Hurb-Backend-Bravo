@@ -50,7 +50,7 @@ paths:
         503:
           description: "Serviço temporariamente indisponível"
           schema:
-            $ref: "#/definitions/ExchangeValue"
+            $ref: "#/definitions/Error"
   /currencies/{currency}:
     put:
       tags:
