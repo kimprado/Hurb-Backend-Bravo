@@ -4,5 +4,6 @@
     "go.useLanguageServer": false,
     "files.associations": {
         "*Dockerfile.package*": "dockerfile",
+        "*.md*": "markdown",
     }
 }
