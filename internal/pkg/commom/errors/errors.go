@@ -72,7 +72,7 @@ func (e *ParametersError) Error() string {
 		instance = fmt.Sprintf("(%v)", e.Instance)
 	}
 
-	return fmt.Sprintf("%s %v %v", e.Title, e.InvalidParameters, instance)
+	return fmt.Sprintf("%s %v %v %v", e.Title, e.Detail, e.InvalidParameters, instance)
 }
 
 // Add adiciona novo ParameterError
