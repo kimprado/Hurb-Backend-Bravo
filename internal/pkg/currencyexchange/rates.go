@@ -189,7 +189,7 @@ func (rf *RatesFinderCache) Find(cs ...Currency) (r map[string]*Rate, err error)
 		if v, ok := rf.cache[r.currency.Code()]; ok && !v.Active() {
 			v.renew(r, rf.timeout)
 		} else {
-			rf.cache[r.currency.Code()] = newRateChacheEntry(r, rf.timeout, rf.logger)
+			rf.cache[r.currency.Code()] = newRateChacheEntry(rf, r, rf.timeout, rf.logger)
 		}
 		rates[r.currency.Code()] = r
 	}
@@ -225,6 +225,7 @@ func (t Timeout) duration() (d time.Duration) {
 
 // rateChacheEntry representa entrada no chache para Rate
 type rateChacheEntry struct {
+	cache   *RatesFinderCache
 	rate    *Rate
 	active  bool
 	timeout Timeout
@@ -232,8 +233,9 @@ type rateChacheEntry struct {
 }
 
 // newRateChacheEntry cria instância de rateChacheEntry
-func newRateChacheEntry(r *Rate, t Timeout, l logging.LoggerRatesCache) (entry *rateChacheEntry) {
+func newRateChacheEntry(rf *RatesFinderCache, r *Rate, t Timeout, l logging.LoggerRatesCache) (entry *rateChacheEntry) {
 	entry = new(rateChacheEntry)
+	entry.cache = rf
 	entry.rate = r
 	entry.active = true
 	entry.timeout = t
@@ -274,6 +276,8 @@ func (entry *rateChacheEntry) renew(r *Rate, t Timeout) {
 func (entry *rateChacheEntry) verifyAndMakeInvalid() {
 	go func() {
 		time.Sleep(entry.timeout.duration())
+		entry.cache.lock()
+		defer entry.cache.unlock()
 		entry.active = false
 		entry.logger.Tracef("Entrada %q removida do cache\n", entry.rate.currency.Code())
 	}()
