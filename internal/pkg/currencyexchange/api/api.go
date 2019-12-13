@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -125,29 +124,9 @@ func (v *Controller) AddSupportedCurrency(res http.ResponseWriter, req *http.Req
 	var err error
 	var dto currencyexchange.CurrencyDTO
 
-	paramErr := errors.NewParametersError()
-
-	err = json.NewDecoder(req.Body).Decode(&dto)
-	if err != nil {
-		paramErr.Add(
-			errors.ParameterError{
-				Name:   "currency",
-				Reason: "'currency' em formato inválido. Não foi possível tratar parâmetro",
-			},
-		)
-	}
-
-	if paramErr.ContainsError() {
-		v.logger.Warnf("Erro na criação de moeda: %v\n", paramErr)
-
-		web.NewHTTPResponse(
-			res,
-			statusCode(paramErr),
-			nil,
-			paramErr,
-		).WriteJSON()
-
-		return
+	currency := params.ByName("currency")
+	dto = currencyexchange.CurrencyDTO{
+		Code: currency,
 	}
 
 	err = v.currencyAdder.Add(dto)

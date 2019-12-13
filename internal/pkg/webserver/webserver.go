@@ -66,7 +66,7 @@ func (ws *WebServer) Start() {
 
 	router.GET("/", ws.home.Serve)
 	router.GET("/exchange", ws.ctrl.Exchange)
-	router.POST("/currencies/", ws.ctrl.AddSupportedCurrency)
+	router.PUT("/currencies/:currency", ws.ctrl.AddSupportedCurrency)
 
 	var defaultHandler http.Handler
 

@@ -80,9 +80,9 @@ func (e *ParametersError) ContainsError() bool {
 
 // ParameterError representa informações sobre erro de parâmetros
 type ParameterError struct {
-	Name   string `json:"name,omitempty"`
-	Value  string `json:"value,omitempty"`
-	Reason string `json:"reason,omitempty"`
+	Name   string `json:"name"`
+	Value  string `json:"value"`
+	Reason string `json:"reason"`
 }
 
 // GetDomainErrorOr retorna fromErr caso seja do tipo DomainError,
