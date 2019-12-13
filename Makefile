@@ -19,6 +19,8 @@ run:
 ## run-safe					: Executa aplicação empacotada com imagem Golang Official(pesada).
 run-safe: 
 	@./scripts/deploy.sh start-safe
+	@echo "Acesse nginx:"
+	@echo "http://localhost:80/"
 	@echo "Acesse API:"
 	@echo "http://`docker-compose port api-safe 3000`/"
 
@@ -72,11 +74,11 @@ test-envvars-container:
 
 ## infra-start					: Inicia serviços de dependência containerizados.
 infra-start:
-	@docker-compose up -d --build redisdb
+	@docker-compose up -d --build redisdb nginx
 
 ## infra-stop					: Interrompe serviços de dependência containerizados.
 infra-stop:
-	@docker-compose rm -fsv redisdb
+	@docker-compose rm -fsv redisdb nginx swagger
 
 ## package					: Empacota API na imagem challenge/exchange-api:latest - Alpine Linux
 package: 
