@@ -14,17 +14,19 @@ import (
 
 // Controller trata requisições http de paredão
 type Controller struct {
-	calculator    currencyexchange.Calculator
-	currencyAdder currencyexchange.CurrencyAdder
-	logger        logging.LoggerAPIExchange
+	calculator      currencyexchange.Calculator
+	currencyAdder   currencyexchange.CurrencyAdder
+	currencyRemover currencyexchange.CurrencyRemover
+	logger          logging.LoggerAPIExchange
 }
 
 // NewController é responsável por instanciar Controller
-func NewController(c currencyexchange.Calculator, a currencyexchange.CurrencyAdder, l logging.LoggerAPIExchange) (r *Controller) {
-	r = new(Controller)
-	r.calculator = c
-	r.currencyAdder = a
-	r.logger = l
+func NewController(c currencyexchange.Calculator, a currencyexchange.CurrencyAdder, r currencyexchange.CurrencyRemover, l logging.LoggerAPIExchange) (ctrl *Controller) {
+	ctrl = new(Controller)
+	ctrl.calculator = c
+	ctrl.currencyAdder = a
+	ctrl.currencyRemover = r
+	ctrl.logger = l
 	return
 }
 
@@ -130,6 +132,40 @@ func (v *Controller) AddSupportedCurrency(res http.ResponseWriter, req *http.Req
 	}
 
 	err = v.currencyAdder.Add(dto)
+
+	if err != nil {
+		v.logger.Errorf("Erro ao criar moeda: %v\n", err)
+
+		web.NewHTTPResponse(
+			res,
+			statusCode(err),
+			nil,
+			err,
+		).WriteJSON()
+
+		return
+	}
+
+	web.NewHTTPResponse(
+		res,
+		http.StatusNoContent,
+		nil,
+		nil,
+	).WriteJSON()
+
+}
+
+// RemoveSupportedCurrency remove moeda suportada
+func (v *Controller) RemoveSupportedCurrency(res http.ResponseWriter, req *http.Request, params httprouter.Params) {
+	var err error
+	var dto currencyexchange.CurrencyDTO
+
+	currency := params.ByName("currency")
+	dto = currencyexchange.CurrencyDTO{
+		Code: currency,
+	}
+
+	err = v.currencyRemover.Remove(dto)
 
 	if err != nil {
 		v.logger.Errorf("Erro ao criar moeda: %v\n", err)

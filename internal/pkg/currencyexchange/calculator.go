@@ -21,7 +21,7 @@ type CurrencyAdder interface {
 // CurrencyRemover é um ponto de entrada para comportamento
 // da aplicação. O controlador do domínio.
 type CurrencyRemover interface {
-	Remove(currency string) (err error)
+	Remove(dto CurrencyDTO) (err error)
 }
 
 // CalculatorController é o ponto de entrada para comportamentos
@@ -92,6 +92,15 @@ func (c *CalculatorController) Exchange(from, to string, amount float64) (ex *Ex
 // Add executa inclusão de moeda suportada
 func (c *CalculatorController) Add(dto CurrencyDTO) (err error) {
 	err = c.cm.Add(dto)
+	if err != nil {
+		err = errors.GetDomainErrorOr(err, newSupportedCurrencyCreationError())
+	}
+	return
+}
+
+// Remove executa remoção de moeda suportada
+func (c *CalculatorController) Remove(dto CurrencyDTO) (err error) {
+	err = c.cm.Remove(dto)
 	if err != nil {
 		err = errors.GetDomainErrorOr(err, newSupportedCurrencyCreationError())
 	}

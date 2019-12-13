@@ -96,8 +96,8 @@ func (cm *CurrencyManagerProxy) Add(dto CurrencyDTO) (err error) {
 }
 
 // Remove delega para outras implementações. Remove moeda
-func (cm *CurrencyManagerProxy) Remove(currency string) (err error) {
-	err = cm.db.Remove(currency)
+func (cm *CurrencyManagerProxy) Remove(dto CurrencyDTO) (err error) {
+	err = cm.db.Remove(dto)
 	return
 }
 
@@ -121,6 +121,8 @@ func NewCurrencyManagerDB(r redis.DBConnection, cr config.RedisDB, cfg config.Co
 
 // Find delega para outras implementações. Consulta moedas ativas
 func (cm *CurrencyManagerDB) Find(currency string) (c *Currency, err error) {
+
+	//TODO: Criar repositório para retirar código de infraestrutura da camada de serviço
 	const found = 1
 
 	con := cm.redisClient.Get()
@@ -140,7 +142,7 @@ func (cm *CurrencyManagerDB) Find(currency string) (c *Currency, err error) {
 	return
 }
 
-// Add delega para outras implementações. Adiciona moeda
+// Add inclui moeda
 func (cm *CurrencyManagerDB) Add(dto CurrencyDTO) (err error) {
 
 	c := newCurrencyFromDTO(dto)
@@ -165,9 +167,17 @@ func (cm *CurrencyManagerDB) Add(dto CurrencyDTO) (err error) {
 	return
 }
 
-// Remove delega para outras implementações. Remove moeda
-func (cm *CurrencyManagerDB) Remove(currency string) (err error) {
+// Remove deleta moeda
+func (cm *CurrencyManagerDB) Remove(dto CurrencyDTO) (err error) {
 
+	//TODO: Implementar validação para verificar se recurso existe.
+	// Caso não exista retornar erro personalizado que a API HTTP
+	// possa interpretar e criar uma resposta "404 Not Found"
+
+	var currency string
+	currency = dto.Code
+
+	//TODO: Criar repositório para retirar código de infraestrutura da camada de serviço
 	con := cm.redisClient.Get()
 	defer con.Close()
 
@@ -184,6 +194,7 @@ func (cm *CurrencyManagerDB) Remove(currency string) (err error) {
 // Realiza carga apenas 1 vez.
 func (cm *CurrencyManagerDB) LoadDefaultSupportedCurrencies() (err error) {
 
+	//TODO: Criar repositório para retirar código de infraestrutura da camada de serviço
 	con := cm.redisClient.Get()
 	defer con.Close()
 
@@ -216,6 +227,8 @@ func (cm *CurrencyManagerDB) LoadDefaultSupportedCurrencies() (err error) {
 }
 
 func (cm *CurrencyManagerDB) verifyLoaded() (loaded bool, err error) {
+
+	//TODO: Criar repositório para retirar código de infraestrutura da camada de serviço
 	const found = 1
 
 	con := cm.redisClient.Get()

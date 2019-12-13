@@ -106,7 +106,7 @@ func TestRemoveSupportedCurrency(t *testing.T) {
 	}
 	assert.NotNil(t, currencyManager)
 
-	err = currencyManager.Remove("BRL")
+	err = currencyManager.Remove(CurrencyDTO{"BRL"})
 	if err != nil {
 		t.Errorf("Consulta Redis %v\n", err)
 		return

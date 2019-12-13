@@ -14,6 +14,8 @@ var PkgSet = wire.NewSet(
 	wire.Bind(new(Calculator), new(*CalculatorController)),
 	// Define que a implementação Padão de CurrencyAdder é CalculatorController
 	wire.Bind(new(CurrencyAdder), new(*CalculatorController)),
+	// Define que a implementação Padão de CurrencyRemover é CalculatorController
+	wire.Bind(new(CurrencyRemover), new(*CalculatorController)),
 	NewCurrencyManagerProxy,
 	// Define que a implementação Padão de CurrencyManager é CurrencyManagerProxy
 	wire.Bind(new(CurrencyManager), new(*CurrencyManagerProxy)),

@@ -90,7 +90,7 @@ func (cm *CurrencyManagerMock) Find(currency string) (c *Currency, err error) {
 func (cm *CurrencyManagerMock) Add(CurrencyDTO) (err error) {
 	return
 }
-func (cm *CurrencyManagerMock) Remove(currency string) (err error) {
+func (cm *CurrencyManagerMock) Remove(CurrencyDTO) (err error) {
 	return
 }
 

@@ -58,7 +58,7 @@ func initializeApp(path string) (*app.ExchangeApp, error) {
 	loggerCalculator := logging.NewCalculator(loggingLevels)
 	calculatorController := currencyexchange.NewCalculatorController(currencyManagerProxy, ratesFinderProxy, currencyExchanger, loggerCalculator)
 	loggerAPIExchange := logging.NewLoggerAPIExchange(loggingLevels)
-	controller := api.NewController(calculatorController, calculatorController, loggerAPIExchange)
+	controller := api.NewController(calculatorController, calculatorController, calculatorController, loggerAPIExchange)
 	loggerWebServer := logging.NewWebServer(loggingLevels)
 	paramWebServer := webserver.NewParamWebServer(controller, configuration, loggerWebServer)
 	webServer := webserver.NewWebServer(paramWebServer)
