@@ -102,7 +102,7 @@ func (c *CalculatorController) Add(dto CurrencyDTO) (err error) {
 func (c *CalculatorController) Remove(dto CurrencyDTO) (err error) {
 	err = c.cm.Remove(dto)
 	if err != nil {
-		err = errors.GetDomainErrorOr(err, newSupportedCurrencyCreationError())
+		err = errors.GetDomainErrorOr(err, newRemoveCurrencyError())
 	}
 	return
 }

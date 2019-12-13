@@ -170,21 +170,24 @@ func (cm *CurrencyManagerDB) Add(dto CurrencyDTO) (err error) {
 // Remove deleta moeda
 func (cm *CurrencyManagerDB) Remove(dto CurrencyDTO) (err error) {
 
-	//TODO: Implementar validação para verificar se recurso existe.
-	// Caso não exista retornar erro personalizado que a API HTTP
-	// possa interpretar e criar uma resposta "404 Not Found"
-
 	var currency string
 	currency = dto.Code
 
 	//TODO: Criar repositório para retirar código de infraestrutura da camada de serviço
+	const notFound = 0
+
 	con := cm.redisClient.Get()
 	defer con.Close()
 
-	_, err = con.Do("SREM", fmt.Sprintf("%s:currency:supported", cm.redisCfg.Prefix), currency)
+	var reply interface{}
+	reply, err = con.Do("SREM", fmt.Sprintf("%s:currency:supported", cm.redisCfg.Prefix), currency)
 
 	if err != nil {
 		return
+	}
+
+	if reply.(int64) == notFound {
+		err = newRemoveCurrencyNotFoundError(currency)
 	}
 
 	return

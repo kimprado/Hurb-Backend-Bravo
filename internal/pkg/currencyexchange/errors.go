@@ -111,6 +111,57 @@ func (e *CurrencyCreationError) Is(target error) bool {
 	}
 }
 
+// RemoveCurrencyNotFoundError representa erro de moeda não encontrada para remoção
+type RemoveCurrencyNotFoundError struct {
+	*errors.GenericError
+}
+
+// newRemoveCurrencyNotFoundError cria instância de CurrencyNotFoundError
+func newRemoveCurrencyNotFoundError(currency string) (e *RemoveCurrencyNotFoundError) {
+	e = new(RemoveCurrencyNotFoundError)
+	e.GenericError = errors.NewGenericError(
+		"Falha ao remover moeda",
+		fmt.Sprintf("Moeda %q inexistente", currency),
+	)
+	return
+}
+
+func (e *RemoveCurrencyNotFoundError) Error() string {
+	return e.GenericError.Error()
+}
+
+// Is informa se target == e. Verifica se e é do tipo
+// RemoveCurrencyNotFoundError, DomainError.
+func (e *RemoveCurrencyNotFoundError) Is(target error) bool {
+	switch target.(type) {
+	case *RemoveCurrencyNotFoundError:
+		return true
+	case *errors.DomainError:
+		return true
+	default:
+		return false
+	}
+}
+
+// RemoveCurrencyError representa erro na remoção da moeda
+type RemoveCurrencyError struct {
+	*errors.GenericError
+}
+
+// newRemoveCurrencyError cria instância de RemoveCurrencyError
+func newRemoveCurrencyError() (e *RemoveCurrencyError) {
+	e = new(RemoveCurrencyError)
+	e.GenericError = errors.NewGenericError(
+		"Falha ao remover moeda",
+		fmt.Sprintf("Moeda não pôde ser removida"),
+	)
+	return
+}
+
+func (e *RemoveCurrencyError) Error() string {
+	return e.GenericError.Error()
+}
+
 // CurrencyRateQuoteNotFoundError representa erro de cotação não encontrada para moeda
 type CurrencyRateQuoteNotFoundError struct {
 	*errors.ParametersError

@@ -13,6 +13,12 @@ func statusCode(e error) (s int) {
 	switch v := e.(type) {
 	case *currencyexchange.CurrencyCreationError:
 		s = http.StatusBadRequest // 400
+	case *currencyexchange.SupportedCurrencyCreationError:
+		s = http.StatusInternalServerError // 500
+	case *currencyexchange.RemoveCurrencyNotFoundError:
+		s = http.StatusNotFound // 404
+	case *currencyexchange.RemoveCurrencyError:
+		s = http.StatusInternalServerError // 500
 	case *currencyexchange.LookupCurrencyError:
 		s = http.StatusServiceUnavailable // 503
 	case *currencyexchange.UnsupportedCurrencyError:

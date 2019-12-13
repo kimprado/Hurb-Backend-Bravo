@@ -168,7 +168,7 @@ func (v *Controller) RemoveSupportedCurrency(res http.ResponseWriter, req *http.
 	err = v.currencyRemover.Remove(dto)
 
 	if err != nil {
-		v.logger.Errorf("Erro ao criar moeda: %v\n", err)
+		v.logger.Warnf("Erro ao remover moeda: %v\n", err)
 
 		web.NewHTTPResponse(
 			res,
