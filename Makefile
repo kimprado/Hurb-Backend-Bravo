@@ -50,9 +50,11 @@ generate:
 	@./scripts/compile.sh generate
 	@./scripts/compile.sh generate-testes
 
+## test-unit					: Testes de unidade
 test-unit:
 	@./scripts/test.sh unit
 
+## test-integration				: Testes de integração
 test-integration:
 	@./scripts/test.sh integration
 
@@ -63,9 +65,11 @@ test-all:
 test-envvars:
 	@./scripts/test.sh envvars
 
+## test-unit-container				: Executa testes de unidade em ambiente containerizado.
 test-unit-container:
 	@docker-compose up --build test-unit
 
+## test-integration-container			: Executa testes de integração em ambiente containerizado.
 test-integration-container:
 	@docker-compose up --build test-integration
 
