@@ -3,9 +3,10 @@
 Descrição da solução para o desafio da conversão monetária([Desafio Bravo](https://github.com/hurbcom/challenge-bravo))
 
 - [O Problema](#O-Problema)
-    - [API](#API)
+    - [Back-end](#Back-end)
         - [Dependências](#Dependências)
             - [Boilerplate Code](#Boilerplate-Code)
+    - [Documentação API](#Documentação-API)
 - [Instalação e Execução](#Instalação-e-Execução)
 - [Ambiente Desenvolvimento](#Ambiente-Desenvolvimento)
     - [Primeira Execução](#Primeira-Execução)
@@ -13,6 +14,7 @@ Descrição da solução para o desafio da conversão monetária([Desafio Bravo]
     - [Execução](#Execução)
     - [Infra Desenvolvimento](#Infra-Desenvolvimento)
     - [Infra Testes](#Infra-Testes)
+    - [Infra Documentação](#Infra-Documentação)
 - [Testes](#Testes)
     - [Unitários](#Unitários)
     - [Integração](#Integração)
@@ -61,9 +63,31 @@ Teremos a resposta JSON que o valor **BRL 5** coresponde a **EUR 1.0949544499416
  curl -X DELETE 'http://localhost:3000/currencies/CAD'
  ```
 
-### API
+### Back-end
 
 Implementação de API como microserviço.
+
+Aplicação tem uma camada de API que faz a interface HTTP, sendo um dos endpoint REST.
+Foi definida uma camada de negócio no pacote *currencyexchange* que tem 
+um ponto de entrada, *CalculatorController*. 
+
+*CalculatorController* colabora com *CurrencyManagerDB* para acessar moedas ativas armazenadas no Redis.
+
+Na sequência *CalculatorController* consulta cotações reais em serviço externo com *RatesFinderService*, que tem suas respostas gardadas em cache em memória, por um Proxy.
+
+Por último a conversão é realizada por meio de *CurrencyExchanger*.
+
+*CalculatorController* depende de interfaces para colaborar com outros serviços.
+
+Uma chamada HTTP típica para câmbio monetário segue este caminho, iniciando pelo [*Controller.Exchange()*](internal/pkg/currencyexchange/api/api.go) da API.
+
+```
+Controller(api)
+  \--(1)--Exchange()---> Calculator
+                           \--(2)--Find()-------> CurrencyManager
+                           \--(3)--Find()-------> RatesFinder
+                           \--(4)--Exchange()---> Exchanger
+```
 
 Segue descrição dos pacotes e arquivos da solução.
 
@@ -123,6 +147,11 @@ Segue descrição dos pacotes e arquivos da solução.
 
 A dependência Wire gera arquivos ***wire_gen.go***.
 
+### Documentação API
+
+Implementada documentação interativa com [swagger](api/swagger.yml). Para acessá-la execute o ambiente como descrito a seguir([Instalação e Execução](#Instalação-e-Execução)), e depois siga as instruções em [Infra Documentação](#Infra-Documentação).
+
+
 ## Instalação e Execução
 
 Para fazer deploy e execução do projeto rode os seguintes comandos:
@@ -130,6 +159,26 @@ Para fazer deploy e execução do projeto rode os seguintes comandos:
 ```sh
 ./configure
 make run
+```
+
+Ao final na execução o comando printa no console as urls para acesso aos serviço.
+
+- http://localhost:80/      (nginx)   - Página web com links úteis
+- http://0.0.0.0:3000/      (API)     - URL da API
+- http://localhost:80/docs  (swagger) - DOcumentação interativa
+
+Ex:
+
+```sh
+make run
+...
+Acesse nginx:
+http://localhost:80/
+Acesse API:
+http://0.0.0.0:3000/
+Acesse swagger:
+http://localhost:80/docs
+...
 ```
 
 ## Ambiente Desenvolvimento
@@ -200,6 +249,23 @@ docker-compose up -d --build redis-test
 ```sh
 docker-compose rm -fsv redis-test
 ```
+
+### Infra Documentação
+
+- http://localhost:80/docs - Modo interativo com back-end
+    ```sh
+    make run
+    ```
+
+- http://localhost:8080/ - Somente documentação
+    ```sh
+    docker-compose up -d swagger
+    ```
+
+- http://localhost:80/docs - Modo interativo com back-end rodando pela IDE, por exemplo
+    ```sh
+    make infra-start
+    ```
 
 ## Testes
 
