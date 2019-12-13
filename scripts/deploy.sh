@@ -7,9 +7,14 @@ case "$1" in
         docker-compose up -d --build \
         api
         ;;
+    start-safe)
+        docker-compose up -d --build \
+        api-safe
+        ;;
     stop)
         docker-compose rm -fsv \
         api \
+        api-safe \
         redisdb
         ;;
     *)

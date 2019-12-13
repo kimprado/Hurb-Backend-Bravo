@@ -5,11 +5,20 @@
 help : Makefile
 	@sed -n 's/^##//p' $<
 
-## run						: Executa aplicação.
+# TODO: verificar alternativa ao Alpine Linux. Indisponibilidades no Repositório apk
+## run						: Executa aplicação empacotada em imagem Alpine Linux.
 run: 
 	@./scripts/deploy.sh start
 	@echo "Acesse API:"
 	@echo "http://`docker-compose port api 3000`/"
+
+# Alternativa criada devido a algumas indisponibilidades percebinas no 
+# repositório apk durante desenvolvimento.
+## run-safe					: Executa aplicação empacotada com imagem Golang Official(pesada).
+run-safe: 
+	@./scripts/deploy.sh start-safe
+	@echo "Acesse API:"
+	@echo "http://`docker-compose port api-safe 3000`/"
 
 ## stop						: Pára aplicação.
 stop:
@@ -67,5 +76,10 @@ infra-start:
 infra-stop:
 	@docker-compose rm -fsv redisdb
 
+## package					: Empacota API na imagem challenge/exchange-api:latest - Alpine Linux
 package: 
 	@./scripts/package.sh package
+
+## package-safe					: Empacota API na imagem challenge/exchange-api:latest - Golang Official(pesada)
+package-safe: 
+	@./scripts/package.sh package-safe
