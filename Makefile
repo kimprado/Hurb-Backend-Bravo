@@ -13,6 +13,8 @@ run:
 	@echo "http://localhost:80/"
 	@echo "Acesse API:"
 	@echo "http://`docker-compose port api 3000`/"
+	@echo "Acesse swagger:"
+	@echo "http://localhost:80/docs"
 
 # Alternativa criada devido a algumas indisponibilidades percebinas no 
 # repositório apk durante desenvolvimento.
@@ -23,6 +25,8 @@ run-safe:
 	@echo "http://localhost:80/"
 	@echo "Acesse API:"
 	@echo "http://`docker-compose port api-safe 3000`/"
+	@echo "Acesse swagger:"
+	@echo "http://localhost:80/docs"
 
 ## stop						: Pára aplicação.
 stop:
