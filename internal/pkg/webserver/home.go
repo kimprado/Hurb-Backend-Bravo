@@ -29,6 +29,9 @@ func (e Home) Serve(w http.ResponseWriter, r *http.Request, params httprouter.Pa
 		Links Úteis:
 		<ul>
 			<li>
+				<a href='/docs'>Documentação</a> - Documentação interativa da API em formato Swagger.
+			</li>
+			<li>
 				<a href='./metrics'>metrics</a> - Méricas/Informações no formato Prometheus, como: Versões das dependências, tempo de resposta, total de requests, Tempo de GC
 			</li>
 		</ul>

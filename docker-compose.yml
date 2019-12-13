@@ -20,6 +20,11 @@ services:
       - 3000:3000
     depends_on:
       - redisdb
+  nginx:
+    image: nginx:1.15.12-alpine
+    network_mode: host
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
   redisdb:
     image: redis:4.0.11-alpine3.8 
     command: redis-server --appendonly yes
@@ -68,3 +73,11 @@ services:
     command: make test-envvars
     volumes:
       - .:/src
+  swagger:
+    image: swaggerapi/swagger-ui:v3.24.3
+    environment: 
+      SWAGGER_JSON: /spec/swagger.yml
+      PORT: 8080
+    network_mode: host
+    volumes:
+      - ${PWD}/api/swagger.yml:/spec/swagger.yml

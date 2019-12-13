@@ -9,6 +9,8 @@ help : Makefile
 ## run						: Executa aplicação empacotada em imagem Alpine Linux.
 run: 
 	@./scripts/deploy.sh start
+	@echo "Acesse nginx:"
+	@echo "http://localhost:80/"
 	@echo "Acesse API:"
 	@echo "http://`docker-compose port api 3000`/"
 
