@@ -399,7 +399,13 @@ go test -parallel 10 -timeout 1m30s ./... -tags="test" -cover -coverprofile=cove
 
 ### Carga
 
-- Não implementado
+- Execução do teste de carga containerizado
+
+Teste de carga executa a consulta ***http://localhost:80/api/exchange?from=USD\&to=EUR\&amount=5***
+
+```sh
+make test-load-container
+```
 
 ## Empacotamento
 
@@ -451,9 +457,10 @@ package-safe                   : Empacota API na imagem challenge/exchange-api:l
 - Pendente refatoração para criar *Repository*.
 - Melhorar um pouco mais como o logging é feito quando existe erro. Ex: Erros de validação não devem ser logados em nível ERROR, mas em WARN, ou nem isso.
 
-### Segurança das Implementações
+### Melhorar testes de carga
 
-- É preciso bateria de testes de carga para garantir que não existe race condition, e tiar eventuais bugs.
+- Incluir novos testes de carga com Jmeter, que permite validar respostas da API, 
+pois Apache ab é limitado quanto a isto.
 
 ### Monitoramento
 
