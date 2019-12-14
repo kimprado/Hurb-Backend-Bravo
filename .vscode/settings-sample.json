@@ -3,6 +3,7 @@
     "go.testTimeout": "120s",
     "go.useLanguageServer": false,
     "files.associations": {
+        "*Dockerfile.ab*": "dockerfile",
         "*Dockerfile.package*": "dockerfile",
         "*.md*": "markdown",
     }

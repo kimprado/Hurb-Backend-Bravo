@@ -20,6 +20,15 @@ services:
       - 3000:3000
     depends_on:
       - redisdb
+  api-load:
+    build:
+      context: '${PWD}'
+      dockerfile: '${PWD}/Dockerfile.package-safe'
+    env_file: '${PWD}/configs/config-load-container.env'
+    ports: 
+      - 3000:3000
+    depends_on:
+      - redisdb
   nginx:
     image: nginx:1.15.12-alpine
     network_mode: host
@@ -75,6 +84,17 @@ services:
     command: make test-envvars
     volumes:
       - .:/src
+  test-load:
+    build: 
+      context: .
+      dockerfile: '${PWD}/Dockerfile.ab'
+    command: [ "bash","/src/test/load-test.sh" ]
+    volumes:
+      - ./test/load-test.sh:/src/test/load-test.sh
+    network_mode: host
+    depends_on:
+      - api-load
+      - nginx
   swagger:
     image: swaggerapi/swagger-ui:v3.24.3
     environment: 

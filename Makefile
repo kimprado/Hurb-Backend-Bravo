@@ -80,6 +80,11 @@ test-all-container:
 test-envvars-container:
 	@docker-compose up --build test-envvars
 
+## test-load-container		: Executa teste de carga em ambiente containerizado.
+test-load-container:
+	@docker-compose up -d --build test-load
+	@docker-compose logs --tail="0" -f test-load &
+
 ## infra-start			: Inicia serviços de dependência containerizados.
 infra-start:
 	@docker-compose up -d --build redisdb nginx

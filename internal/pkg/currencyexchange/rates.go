@@ -242,9 +242,9 @@ func newRateChacheEntry(rf *RatesFinderCache, r *Rate, t Timeout, l logging.Logg
 	entry.logger = l
 	entry.verifyAndMakeInvalid()
 
-	if entry.logger.IsDebugEnabled() {
+	if entry.logger.IsInfoEnabled() {
 		until := time.Now().Add(entry.timeout.duration()).Format("2006-01-02 15:04:05")
-		entry.logger.Debugf("Nova Entrada %q válida até %q por %q\n", entry.rate.currency.Code(), until, entry.timeout.duration())
+		entry.logger.Infof("Nova Entrada %q válida até %q por %q\n", entry.rate.currency.Code(), until, entry.timeout.duration())
 	}
 	return
 }
