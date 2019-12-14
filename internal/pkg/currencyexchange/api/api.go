@@ -82,7 +82,7 @@ func (v *Controller) Exchange(res http.ResponseWriter, req *http.Request, params
 	}
 
 	if paramErr.ContainsError() {
-		v.logger.Warnf("Consulta Exchange com parâmetro(s) inválido(s):\n\t%v\n", queryValues)
+		v.logger.Warnf("Consulta Exchange : %v\n", paramErr)
 
 		web.NewHTTPResponse(
 			res,
