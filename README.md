@@ -71,15 +71,17 @@ Aplicação tem uma camada de API que faz a interface HTTP, sendo um dos endpoin
 Foi definida uma camada de negócio no pacote *currencyexchange* que tem 
 um ponto de entrada, *CalculatorController*. 
 
-*CalculatorController* colabora com *CurrencyManagerDB* para acessar moedas ativas armazenadas no Redis.
-
-Na sequência *CalculatorController* consulta cotações reais em serviço externo com *RatesFinderService*, que tem suas respostas gardadas em cache em memória, por um Proxy.
-
-Por último a conversão é realizada por meio de *CurrencyExchanger*.
-
-*CalculatorController* depende de interfaces para colaborar com outros serviços.
-
 Uma chamada HTTP típica para câmbio monetário segue este caminho, iniciando pelo [*Controller.Exchange()*](internal/pkg/currencyexchange/api/api.go) da API.
+
+- *CalculatorController* do negócio, colabora com *CurrencyManagerDB* para acessar moedas ativas armazenadas no Redis.
+
+- Na sequência *CalculatorController* consulta cotações reais em serviço externo com *RatesFinderService*, que tem suas respostas gardadas em cache em memória, por um Proxy.
+
+- Por último a conversão é realizada por meio de *CurrencyExchanger*.
+
+*CalculatorController* implementa *Calculator* e depende de interfaces na colaboração com outros serviços.
+
+A seguir outra forma de representar Interações entre as interfaçes que os componentes implementam. *Controller(api)* é o único participante concreto.
 
 ```
 Controller(api)
