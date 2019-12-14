@@ -1,5 +1,5 @@
 # compile stage
-FROM golang:1.13.0 AS build
+FROM golang:1.13.4 AS build
 
 ARG workbuild=/usr/dist
 

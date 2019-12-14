@@ -1,5 +1,5 @@
 # compile stage
-FROM golang:1.13.0 AS build
+FROM golang:1.13.4 AS build
 
 ARG workbuild=/usr/dist
 
@@ -15,7 +15,7 @@ RUN     wire ./cmd/exchangeAPI/
 RUN     make build-static path=${workbuild}
 
 # package stage
-FROM golang:1.13.0
+FROM golang:1.13.4
 
 LABEL maintainer="Challenge Bravo"
 

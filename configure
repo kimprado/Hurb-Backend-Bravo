@@ -5,7 +5,7 @@ set -e
 CURDIR=`pwd`
 DIR=".tmp-configure"
 DOCKER_GROUP="docker"
-GO_VERSION="go1.13"
+GO_VERSION="go1.13.4"
 GO_PKG="$GO_VERSION.linux-amd64.tar.gz"
 GO_BASE="/usr/local"
 GO_ROOT="$GO_BASE/go"
