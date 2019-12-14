@@ -424,20 +424,24 @@ Todos comandos para facilitar o desenvolvimento estão no [Makefile](Makefile).
 make help
 ```
 ```yaml
-help                                           : Exibe comandos make disponíveis.
-run                                            : Executa aplicação empacotada em imagem Alpine Linux.
-run-safe                                       : Executa aplicação empacotada com imagem Golang Official(pesada).
-stop                                           : Pára aplicação.
-build                                          : Compila aplicação. Gera arquivo './exchange-api.bin'.
-build-static                                   : Compila aplicação com lincagem estática. Ex: 'make build-static path=./'.
-wire                                           : Gera/Atualiza códigos(wire_gen.go) do framework de Injeção de Dependências.
-generate                                       : Atualiza códigos(wire_gen.go) do framework de Injeção de Dependências.
-test-all                                       : Executa testes de unidade e integração.
-test-all-container                             : Executa testes de unidade e integração em ambiente containerizado.
-infra-start                                    : Inicia serviços de dependência containerizados.
-infra-stop                                     : Interrompe serviços de dependência containerizados.
-package                                        : Empacota API na imagem challenge/exchange-api:latest - Alpine Linux
-package-safe                                   : Empacota API na imagem challenge/exchange-api:latest - Golang Official(pesada)
+help                           : Exibe comandos make disponíveis.
+run                            : Executa aplicação empacotada em imagem Alpine Linux.
+run-safe                       : Executa aplicação empacotada com imagem Golang Official(pesada).
+stop                           : Pára aplicação.
+build                          : Compila aplicação. Gera arquivo './exchange-api.bin'.
+build-static                   : Compila aplicação com lincagem estática. Ex. 'make build-static path=./'.
+wire                           : Gera/Atualiza códigos(wire_gen.go) do framework de Injeção de Dependências.
+generate                       : Atualiza códigos(wire_gen.go) do framework de Injeção de Dependências.
+test-unit                      : Testes de unidade
+test-integration               : Testes de integração
+test-all                       : Executa testes de unidade e integração.
+test-unit-container            : Executa testes de unidade em ambiente containerizado.
+test-integration-container     : Executa testes de integração em ambiente containerizado.
+test-all-container             : Executa testes de unidade e integração em ambiente containerizado.
+infra-start                    : Inicia serviços de dependência containerizados.
+infra-stop                     : Interrompe serviços de dependência containerizados.
+package                        : Empacota API na imagem challenge/exchange-api:latest - Alpine Linux
+package-safe                   : Empacota API na imagem challenge/exchange-api:latest - Golang Official(pesada)
 ```
 
 ## Melhorias
