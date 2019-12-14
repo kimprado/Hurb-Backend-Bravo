@@ -96,12 +96,12 @@ Segue descrição dos pacotes e arquivos da solução.
 .
 ├── cmd
 │   └── exchangeAPI
-│       ├── main.go     # Main da Aplicação                           
-│       ├── wire_gen.go # _boilerplate code_
-│       └── wire.go     # DI
+│       ├── main.go             # Main da Aplicação                           
+│       ├── wire_gen.go         # _boilerplate code_
+│       └── wire.go             # Provedores de Dependência da aplicão
 ├── configs
-│   ├── config.env      # Arquivo ENV de configuração usado em 'make run'
-├── go.mod              # Dependências da aplicação
+│   ├── config.env              # Arquivo ENV de configuração usado em 'make run'
+├── go.mod                      # Dependências da aplicação
 ├── internal
 │   ├── app
 │   │   ├── exchangeAPI.go      # Inicialização da Aplicação
@@ -123,7 +123,7 @@ Segue descrição dos pacotes e arquivos da solução.
 │       │   ├── ratesIT_test.go
 │       │   ├── rule.go         # Implementa regras de convesão monetária
 │       │   ├── wire_gen.go     # _boilerplate code_
-│       │   ├── wire.go         # DI
+│       │   ├── wire.go         # Provedores de Dependência dos testes da package
 │       │   └── wireSets.go     # Declaração das depências DI de testes 
 │       ├── infra               # Pacote de infraestrutura
 │       └── webserver           
