@@ -205,6 +205,12 @@ As seguintes ferramentas serão provisionadas:
 - **Docker Compose** - ferramenta usada para orquestração em ambiende de dev.
 - **Go** - linguagem de programação.
 
+Instale o Wire com o seguinte comando:
+
+```sh
+go get github.com/google/wire/cmd/wire@v0.3.0
+```
+
 Os seguintes arquivos são criados pelo arquivo configure:
 
 - .vscode/settings.json - Arquivo da IDE VSCode
